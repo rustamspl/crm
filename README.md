@@ -56,4 +56,10 @@ cd ..<br />
 
 
 
+mkdir yeldars<br />
+cd yeldars<br />
+git clone https://github.com/yeldars/crm.git<br />
+cd ..<br />
+
+
 
