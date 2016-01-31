@@ -1,0 +1,8 @@
+main
+main/github.com/beego/bee
+main/github.com/astaxie/beego
+main/github.com/go-sql-driver/mysql
+main/github.com/astaxie/beego/orm
+main/golang.org/x/crypto
+main/github.com/Shopify/go-lua
+main/github.com/tealeg/xlsx

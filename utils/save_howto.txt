@@ -1,0 +1,43 @@
+	function basicsCtrl($scope, $http,$modal,$log,$stateParams,DMLService) {
+
+		$scope.table_name="tasks";
+		$scope.detail_href="#/crm/taskdetails/";
+
+		...
+
+		$scope.bind = function bind(){
+			$http.get('../restapi/detail?code=pages&id='+$stateParams.id).
+			success(function(data) {
+				// here the data from the api is assigned to a variable named users
+
+				$scope.pageTypeBind();
+				$scope.editing = false;
+				$scope.detail = {};
+				$scope.detail.id = $stateParams.id;
+				if ($stateParams.id!=0) {
+					$scope.detail = data.pages[0];
+				}
+
+			});
+		}		
+		
+		$scope.save = function save(){
+			DMLService.update(  [ {table_name:$scope.table_name,action:$scope.detail.id == 0 ? "insert":"update", values: [$scope.detail]}  ]).
+				success(function (data) {
+					if (data.error!="0") {
+						alert(data.error_text);
+						return;
+					}
+					if ($scope.detail.id == 0) {
+						data.items.forEach(function (item, i, arr) {
+							if (item.table_name==$scope.table_name){
+								location.href = $scope.detail_href + item.last_insert_id;
+							}
+						});
+					}else{
+						$scope.bind();
+					}
+				});
+			}
+			
+	

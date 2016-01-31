@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS SIP</title>
+</head>
+<body>
+<div id="theirMultimedia"/>
+<script type="text/javascript" src="jssip-0.7.11.min.js"> </script>
+
+<script type="text/javascript">
+    var configuration = {
+        'ws_servers': 'ws://192.168.1.105:5066',
+        'uri': 'sip:7004@192.168.1.105',
+        'password': '123456'
+    };
+
+    var coolPhone = new JsSIP.UA(configuration);
+
+    coolPhone.on('connected', function(e){ alert("connected ") });
+    coolPhone.on('registered', function(e){ alert("registered") });
+    coolPhone.on('newRTCSession', function(e){
+
+        alert("CALL RECEIVED ");
+
+        session_incoming= e.session;
+
+        session_incoming.on('addstream',function(e){
+
+            var theirMultimedia = document.getElementById('theirMultimedia');
+
+            remote_stream = e.stream;
+            theirMultimedia = JsSIP.rtcninja.attachMediaStream(theirMultimedia, remote_stream);
+        });
+
+        var options = {
+            'mediaConstraints': {
+                'audio': true,
+                'video': false
+            }
+        };
+
+        session_incoming.answer(options);
+
+    });
+
+    coolPhone.start();
+
+</script>
+</body>
+</html>

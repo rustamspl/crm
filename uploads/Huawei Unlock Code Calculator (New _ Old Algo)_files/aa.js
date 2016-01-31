@@ -1,0 +1,1 @@
+document.write('<script type="text/javascript" src="js/advertisement.js"></script><script type="text/javascript" src="js/aadetect.js"></script><LINK REL=StyleSheet HREF="js/aa.css" TYPE="text/css" MEDIA=screen>');

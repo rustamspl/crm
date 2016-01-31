@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<!--
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.5
+Version: 3.3.0
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Like: www.facebook.com/keenthemes
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
+-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" data-ng-app="FarabiTestApp">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+<meta charset="utf-8"/>
+<title>Farabi</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta content="" name="description"/>
+<meta content="" name="author"/>
+<!-- BEGIN GLOBAL MANDATORY STYLES -->
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
+<link href="../theme/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="../theme/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
+<link href="../theme/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="../theme/assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+<!-- END GLOBAL MANDATORY STYLES -->
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link href="login.css" rel="stylesheet" type="text/css"/>
+<!-- END PAGE LEVEL SCRIPTS -->
+<!-- BEGIN THEME STYLES -->
+<link href="../theme/assets/global/css/components.css" id="style_components" rel="stylesheet" type="text/css"/>
+<link href="../theme/assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
+<link href="../theme/assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
+<link href="../theme/assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css" id="style_color"/>
+<link href="../theme/assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+<!-- END THEME STYLES -->
+<link rel="shortcut icon" href="favicon.ico"/>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="login" data-ng-controller="ProcessCtrls">
+<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+<div class="menu-toggler sidebar-toggler">
+</div>
+<!-- END SIDEBAR TOGGLER BUTTON -->
+<!-- BEGIN LOGO -->
+<div class="logo">
+	<a href="index.html">
+	<img src="../img/farabi/as-farabi-logo3.png" style="height: 50px;" alt=""/>
+	</a>
+</div>
+<!-- END LOGO -->
+<!-- BEGIN LOGIN -->
+<div class="content" ng-if="!testing">
+	<!-- BEGIN LOGIN FORM -->
+	<form class="login-form" action="../../auth/login" method="post">
+		<div class="form-title">
+			<span class="form-title" translate>Welcome.</span>
+
+		</div>
+		<div class="alert alert-danger">
+			<button class="close" data-close="alert"></button>
+			<span translate>
+			Первый тест! Внимательно
+
+прочтите инструкцию и можете
+
+переходить к выполнению теста.
+
+Ниже попарно представлены различные
+
+профессии. В каждой паре профессий
+
+постарайтесь найти ту,которой вы
+
+отдаете предпочтение
+			  </span>
+		</div>
+	</form>
+
+	<div class="form-actions">
+		<button ng-click="start()" class="btn btn-primary btn-block uppercase" translate>Start testing</button>
+	</div>
+	<!-- END LOGIN FORM -->
+	<!-- BEGIN FORGOT PASSWORD FORM -->
+
+	<!-- END FORGOT PASSWORD FORM -->
+	<!-- BEGIN REGISTRATION FORM -->
+
+	<!-- END REGISTRATION FORM -->
+</div>
+
+<div class="content" ng-if="testing">
+	<div class="form-title">
+		<h4 class="form-title"><translate>Вопрос</translate> #{{currentQ}}</h4>
+		<span class="form-title" translate>{{currentQuestionText()}}</span>
+
+
+	</div>
+	<div class="form-actions">
+		<div class="col-md-6">
+			<button ng-click="next(1)" class="btn btn-primary btn-block uppercase" translate>Farabi_Answer_Yes</button>
+		</div>
+		<div class="col-md-6">
+			<button ng-click="next(0)" class="btn btn-primary btn-block uppercase" translate>Farabi_Answer_No</button>
+		</div>
+	</div>
+</div>
+<div class="copyright hide">
+	<translate>2015 © B-APPS LLC</translate>
+</div>
+<!-- END LOGIN -->
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
+<!--[if lt IE 9]>
+<script src="../theme/assets/global/plugins/respond.min.js"></script>
+<script src="../theme/assets/global/plugins/excanvas.min.js"></script>
+<![endif]-->
+<script src="../theme/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="../theme/assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<script src="../theme/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../theme/assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="../theme/assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="../theme/assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<!-- END CORE PLUGINS -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script src="../theme/assets/global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="../theme/assets/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="../theme/assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
+<script src="../theme/assets/admin/layout/scripts/demo.js" type="text/javascript"></script>
+<script src="../theme/assets/admin/pages/scripts/login.js" type="text/javascript"></script>
+
+
+
+<!-- BEGIN CORE ANGULARJS PLUGINS -->
+<script src="../theme/assets/global/plugins/angularjs/angular.min.js" type="text/javascript"></script>
+<script src="../theme/assets/global/plugins/angularjs/angular-sanitize.min.js" type="text/javascript"></script>
+<script src="../theme/assets/global/plugins/angularjs/angular-touch.min.js" type="text/javascript"></script>
+<script src="../theme/assets/global/plugins/angularjs/plugins/angular-ui-router.min.js" type="text/javascript"></script>
+<script src="../theme/assets/global/plugins/angularjs/plugins/ocLazyLoad.min.js" type="text/javascript"></script>
+<script src="../theme/assets/global/plugins/angularjs/plugins/ui-bootstrap-tpls.min.js" type="text/javascript"></script>
+
+<script src="../js/angular-translate.js" type="text/javascript"></script>
+
+<!-- END CORE ANGULARJS PLUGINS -->
+<script src="farabi-test-app.js" type="text/javascript"></script>
+<!-- END PAGE LEVEL SCRIPTS -->
+<script>
+jQuery(document).ready(function() {
+Metronic.init(); // init metronic core components
+Layout.init(); // init current layout
+Login.init();
+Demo.init();
+});
+</script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

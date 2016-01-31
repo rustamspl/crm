@@ -1,0 +1,39 @@
+<h4 translate>Prolong Date</h4>
+<div class="row">
+    <div class="col-md-6">
+        <p class="input-group">
+            <input type="text" class="form-control" datepicker-popup="{{dateProlong.format}}" ng-model="op.attrs.date_prolong" is-open="dateProlong.opened" min-date="dateProlong.minDate" max-date="'2017-01-22'" datepicker-options="dateProlong.dateOptions" date-disabled="dateProlong.disabled(date, mode)" ng-required="true" close-text="Close" />
+						              <span class="input-group-btn">
+						                <button type="button" class="btn btn-default" ng-click="dateProlong.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+						              </span>
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div>
+            <timepicker  ng-model="op.attrs.time_prolong" ng-change="timeProlong.changed()" hour-step="timeProlong.hstep" minute-step="timeProlong.mstep" show-meridian="timeProlong.ismeridian"></timepicker>
+        </div>
+    </div>
+</div>
+<div class="row" >
+    <div class="form-group col-md-12">
+        <label translate>Comments</label>
+        <div class="input-group">
+            <span class="input-group-addon">
+            <i class="fa fa-comment"></i>
+            </span>
+            <input type="text" ng-model="op.attrs.comment" class="form-control" placeholder="{{ 'Comments' | translate }}" >
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+
+
+
+
+</script>
