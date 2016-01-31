@@ -5,7 +5,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"github.com/tealeg/xlsx"
 "strings"
-"main/auth"
+"github.com/yeldars/crm/auth"
 	"strconv"
 )
 

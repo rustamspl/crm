@@ -3,16 +3,15 @@ package routes
 
 import "net/http"
 import (
-	"main/restapi"
-	"main/file"
-	//"main/github.com/julienschmidt/httprouter"
+	"github.com/yeldars/crm/restapi"
+	"github.com/yeldars/crm/file"
 	"github.com/julienschmidt/httprouter"
 	"fmt"
 	"log"
 	"os"
-	"main/auth"
+	"github.com/yeldars/crm/auth"
 	"github.com/astaxie/beego/orm"
-	"main/utils"
+	"github.com/yeldars/crm/utils"
 )
 
 func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {

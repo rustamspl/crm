@@ -5,11 +5,11 @@ import (
 	"os"
 	"strings"
 	"github.com/astaxie/beego/orm"
-	"main/models"
+	"github.com/yeldars/crm/models"
 	"log"
 	"encoding/json"
 	"github.com/tealeg/xlsx"
-	"main/restapi"
+	"github.com/yeldars/crm/restapi"
 )
 
 func ImportDeal01XLS(w http.ResponseWriter, r *http.Request, fileName string) (error) {

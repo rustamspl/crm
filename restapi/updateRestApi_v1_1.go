@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"log"
 	"fmt"
-	"main/auth"
+	"github.com/yeldars/crm/auth"
 	"strconv"
 )
 

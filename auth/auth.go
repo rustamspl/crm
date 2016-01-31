@@ -6,9 +6,9 @@ import (
 	"github.com/astaxie/beego/orm"
 	"encoding/json"
 	"fmt"
-	"main/models"
+	"github.com/yeldars/crm/models"
 	"golang.org/x/crypto/bcrypt"
-	"main/utils"
+	"github.com/yeldars/crm/utils"
 )
 
 

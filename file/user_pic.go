@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 	"strconv"
-	"main/restapi"
+	"github.com/yeldars/crm/restapi"
 )
 
 func UserPic(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {

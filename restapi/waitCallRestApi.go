@@ -8,7 +8,7 @@ import (
 	"strings"
 	"encoding/json"
 	"log"
-	"main/auth"
+	"github.com/yeldars/crm/auth"
 )
 
 

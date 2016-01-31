@@ -6,7 +6,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"encoding/json"
 	"github.com/julienschmidt/httprouter"
-	"main/auth"
+	"github.com/yeldars/crm/auth"
 )
 
 

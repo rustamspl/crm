@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"github.com/astaxie/beego/orm"
 	"log"
-	"main/auth"
+	"github.com/yeldars/crm/auth"
 )
 
 type TErrorResponse struct {

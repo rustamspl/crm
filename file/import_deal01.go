@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 	"github.com/astaxie/beego/orm"
-	"main/models"
+	"github.com/yeldars/crm/models"
 	"log"
 	"encoding/json"
 )

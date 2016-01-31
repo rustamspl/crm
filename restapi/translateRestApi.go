@@ -3,12 +3,12 @@ package restapi
 import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
-	"main/models"
+	"github.com/yeldars/crm/models"
 	"encoding/json"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
-	"main/auth"
+	"github.com/yeldars/crm/auth"
 )
 
 

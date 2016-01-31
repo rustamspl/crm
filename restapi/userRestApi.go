@@ -4,7 +4,7 @@ import "net/http"
 import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
-	"main/models"
+	"github.com/yeldars/crm/models"
 	"encoding/json"
 	"github.com/julienschmidt/httprouter"
 	"strconv"

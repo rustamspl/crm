@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 	"strconv"
-	"main/auth"
+	"github.com/yeldars/crm/auth"
 	"encoding/json"
 	"log"
 )

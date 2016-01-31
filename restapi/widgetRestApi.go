@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"strings"
 	"strconv"
-	"main/auth"
+	"github.com/yeldars/crm/auth"
 )
 
 type WidgetSql struct {

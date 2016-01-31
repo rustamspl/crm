@@ -3,7 +3,6 @@ package restapi
 
 import "net/http"
 import (
-	//"main/github.com/julienschmidt/httprouter"
 	"github.com/julienschmidt/httprouter"
 	"log"
 

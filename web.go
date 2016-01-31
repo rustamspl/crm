@@ -1,19 +1,17 @@
-package github.com/yeldars/crm
+package main
 
 import 	_ "github.com/go-sql-driver/mysql"
 import 	"os"
 import 	"fmt"
 import 	"log"
 import 	"net/http"
-//import "main/routes"
 
 
 
 import (
 	"github.com/astaxie/beego/orm"
-	"main/models"
-	//"main/routes"
-	"main/routes"
+	"github.com/yeldars/crm/models"
+	"github.com/yeldars/crm/routes"
 )
 
 func init() {

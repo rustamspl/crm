@@ -2,10 +2,10 @@ package restapi
 import (
 	"github.com/julienschmidt/httprouter"
 	"net/http"
-	"main/utils/email"
+	"github.com/yeldars/crm/utils/email"
 	"net/smtp"
-	"main/utils"
-	"main/auth"
+	"github.com/yeldars/crm/utils"
+	"github.com/yeldars/crm/auth"
 )
 
 

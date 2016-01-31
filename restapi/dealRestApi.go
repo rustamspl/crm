@@ -6,10 +6,10 @@ import (
 	"strconv"
 	"fmt"
 	"encoding/json"
-	"main/models"
+	"github.com/yeldars/crm/models"
 
 
-	"main/auth"
+	"github.com/yeldars/crm/auth"
 	"log"
 
 )
