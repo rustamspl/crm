@@ -1,4 +1,4 @@
-package main
+package github.com/yeldars/crm
 
 import 	_ "github.com/go-sql-driver/mysql"
 import 	"os"
