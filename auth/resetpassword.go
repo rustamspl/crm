@@ -5,8 +5,8 @@ import (
 	"github.com/astaxie/beego/orm"
 	"encoding/json"
 	"fmt"
-	"golang.org/x/crypto/bcrypt"
 	"log"
+	"golang.org/x/crypto/bcrypt"
 )
 type TPasswordResetResult struct {
  Error int64 `json:"error"`
