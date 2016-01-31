@@ -41,7 +41,7 @@ cd ..<br />
 
 mkdir x<br />
 cd x<br />
-git clone https://golang.org/x/crypto.git<br />
+git clone https://github.com/golang/crypto.git<br />
 cd ..<br />
 
 mkdir Shopify<br />
