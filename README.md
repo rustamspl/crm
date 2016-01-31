@@ -64,6 +64,8 @@ cd ..<br />
 mkdir gorilla<br />
 cd gorilla<br />
 git clone  https://github.com/gorilla/sessions.git<br />
+git clone  https://github.com/gorilla/context.git<br />
+git clone  https://github.com/gorilla/securecookie.git<br />
 cd ..<br />
 
 
