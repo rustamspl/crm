@@ -26,32 +26,32 @@ Ctrl+D
 cd /usr/local/go/src/github.com/<br />
 mkdir beego<br />
 cd beego<br />
-git clone http://github.com/beego/bee.git<br />
+git clone https://github.com/beego/bee.git<br />
 cd ..<br />
 
 mkdir astaxie<br />
 cd astaxie<br />
-git clone github.com/astaxie/beego.git<br />
+git clone https://github.com/astaxie/beego.git<br />
 cd ..<br />
 
 mkdir go-sql-driver<br />
 cd go-sql-driver<br />
-git clone http://github.com/go-sql-driver/mysql.git<br />
+git clone https://github.com/go-sql-driver/mysql.git<br />
 cd ..<br />
 
 mkdir x<br />
 cd x<br />
-git clone http://golang.org/x/crypto.git<br />
+git clone https://golang.org/x/crypto.git<br />
 cd ..<br />
 
 mkdir Shopify<br />
 cd Shopify<br />
-git clone github.com/Shopify/go-lua.git<br />
+git clone https://github.com/Shopify/go-lua.git<br />
 cd ..<br />
 
 mkdir tealeg<br />
 cd tealeg<br />
-git clone github.com/tealeg/xlsx.git<br />
+git clone  https://github.com/tealeg/xlsx.git<br />
 cd ..<br />
 
 
