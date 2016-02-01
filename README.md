@@ -19,7 +19,8 @@ github.com/tealeg/xlsx<br />
 
 \#mysql -u root -p<br />
 
-CREATE USER 'crm'@'localhost' IDENTIFIED BY 'crm';GRANT ALL PRIVILEGES ON *.* TO 'crm'@'localhost' IDENTIFIED BY 'crm' WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;GRANT ALL PRIVILEGES ON `golang`.* TO 'crm'@'localhost';<br />
+CREATE USER 'crm'@'localhost' IDENTIFIED BY 'crm';<br />
+GRANT ALL PRIVILEGES ON `golang`.* TO 'crm'@'localhost';<br />
 
 Ctrl+D
 
