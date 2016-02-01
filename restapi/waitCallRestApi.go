@@ -45,7 +45,7 @@ func WaitCallRestApiGet(res http.ResponseWriter, req *http.Request, _ httprouter
 
 
 
-	//for i := 0; i < 10; i++ {
+	for i := 0; i < 10; i++ {
 		time.Sleep(time.Second * 2)
 		r.CallerId = "EMPTY"
 		r.Ok =false
@@ -72,7 +72,7 @@ func WaitCallRestApiGet(res http.ResponseWriter, req *http.Request, _ httprouter
 			//break
 		}
 
-	//}
+	}
 
 
 	jsonData, _ := json.Marshal(r)
