@@ -24,6 +24,11 @@ GRANT ALL PRIVILEGES ON `golang`.* TO 'crm'@'localhost';<br />
 
 Ctrl+D
 
+
+mkdir /usr/local/go/src/golang.org/x<br />
+cd /usr/local/go/src/golang.org/x<br />
+git clone https://github.com/golang/crypto.git<br />
+
 cd /usr/local/go/src/github.com/<br />
 mkdir beego<br />
 cd beego<br />
@@ -40,10 +45,7 @@ cd go-sql-driver<br />
 git clone https://github.com/go-sql-driver/mysql.git<br />
 cd ..<br />
 
-mkdir x<br />
-cd x<br />
-git clone https://github.com/golang/crypto.git<br />
-cd ..<br />
+
 
 mkdir Shopify<br />
 cd Shopify<br />
