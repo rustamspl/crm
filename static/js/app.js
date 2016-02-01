@@ -274,13 +274,13 @@ MetronicApp.run(['$urlRouter',"$rootScope", '$http',"settings", "$state","cssInj
 
                         }
                         $rootScope.waitcall();
-                        $rootScope.$apply();
+                        //$rootScope.$apply();
                     }).error(function(data) {
                     console.log("fail");
 
                     $rootScope.waitcall();
                 });
-            }, 200000);
+            }, 5000);
 
         }
     $rootScope.waitcall();

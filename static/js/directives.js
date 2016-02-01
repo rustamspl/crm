@@ -86,7 +86,7 @@ MetronicApp.directive('audios', function($sce) {
     link: function (scope) {
         scope.$watch('code', function (newVal, oldVal) {
            if (newVal !== undefined) {
-               scope.url = $sce.trustAsResourceUrl("//192.168.1.105/rec/" + newVal + ".wav");
+               scope.url = $sce.trustAsResourceUrl("/rec/" + newVal + ".wav");
            }
         });
     }
