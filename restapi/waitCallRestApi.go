@@ -69,7 +69,7 @@ func WaitCallRestApiGet(res http.ResponseWriter, req *http.Request, _ httprouter
 
 
 			r.Ok = true
-			//break
+			break
 		}
 
 	}

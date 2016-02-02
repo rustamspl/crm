@@ -315,8 +315,8 @@ MetronicApp.run(['$urlRouter',"$rootScope", '$http',"settings", "$state","cssInj
             $rootScope.session_parameters=[];
             angular.forEach(data.items, function(value, key) {
                 $rootScope.session_parameters[value.code]=value.value;
-                console.log(value.code);
-                console.log(value.value);
+                //console.log(value.code);
+                //console.log(value.value);
             });
             <!--<link href="theme/assets/admin/layout/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>-->
 
