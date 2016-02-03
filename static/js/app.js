@@ -324,6 +324,23 @@ MetronicApp.run(['$urlRouter',"$rootScope", '$http',"settings", "$state","cssInj
 
         });
 
+
+    $http
+        .get("../restapi/query/get?code=session_roles")
+        .success(function(data) {
+
+            $rootScope.session_roles=[];
+            angular.forEach(data.items, function(value, key) {
+                $rootScope.session_roles[value.code]=true;
+                //console.log(value.code);
+            });
+            <!--<link href="theme/assets/admin/layout/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>-->
+
+
+
+        });
+
+
     $http
             .get("../restapi/pages/get")
             .success(function(data) {

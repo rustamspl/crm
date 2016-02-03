@@ -290,14 +290,14 @@
 							<a href="#/settings/userdetails/{{sessioninfo.id}}">
 							<i class="icon-user"></i> {{"My Profile" | translate}} </a>
 						</li>
-					<li>
+					<li ng-if="session_roles.admin">
 						<a href="#/settings/settings/">
 							<i class="fa fa-wrench"></i> {{"Settings" | translate}} </a>
 					</li>
-						<li>
+						<!--<li>
 							<a href="#">
 							<i class="icon-calendar"></i> {{"My Calendar" | translate}} </a>
-						</li>
+						</li>-->
 						<li>
 							<a href="#">
 							<i class="icon-envelope-open"></i> {{"My Inbox" | translate}} <span class="badge badge-danger">
@@ -305,17 +305,17 @@
 							</a>
 						</li>
 						<li>
-							<a href="#/todo">
+							<a href="#/crm/tasks">
 							<i class="icon-rocket"></i> {{"My Tasks" | translate}} <span class="badge badge-success">
 							7 </span>
 							</a>
 						</li>
 						<li class="divider">
 						</li>
-						<li>
+						<!--<li>
 							<a href="#">
 							<i class="icon-lock"></i> {{"Lock Screen" | translate}} </a>
-						</li>
+						</li>-->
 						<li>
 							<a href="../auth/logout">
 							<i class="icon-key"></i> {{"Log Out" | translate}}  </a>

@@ -2,10 +2,7 @@
 <div class="row">
     <div class="col-md-6">
         <p class="input-group">
-            <input type="text" class="form-control" datepicker-popup="{{dateProlong.format}}" ng-model="op.attrs.date_prolong" is-open="dateProlong.opened" min-date="dateProlong.minDate" max-date="'2017-01-22'" datepicker-options="dateProlong.dateOptions" date-disabled="dateProlong.disabled(date, mode)" ng-required="true" close-text="Close" />
-						              <span class="input-group-btn">
-						                <button type="button" class="btn btn-default" ng-click="dateProlong.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-						              </span>
+            <input type="date" class="form-control" ng-model="op.attrs.date_prolong" max-date="'2017-01-22'" datepicker-options="dateProlong.dateOptions"  ng-required="true"  />
         </p>
     </div>
 </div>
