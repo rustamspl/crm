@@ -5,7 +5,6 @@ import (
 	"io"
 	"os"
 	"github.com/julienschmidt/httprouter"
-	"log"
 )
 
 func Upload(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
