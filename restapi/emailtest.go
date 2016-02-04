@@ -4,29 +4,41 @@ import (
 	"net/http"
 	"github.com/yeldars/crm/utils/email"
 	"net/smtp"
-	"github.com/yeldars/crm/utils"
-	"github.com/yeldars/crm/auth"
+	"github.com/astaxie/beego/orm"
 )
 
 
 
 func EmailTest(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 
-	m := email.NewHTMLMessage("Текст по-русски. Параметры?", "<h4>Содержимое по-русски</h4>")
-	m.From = utils.GetUserParamValue(auth.UserId(req), "smtp_from")
+	o := orm.NewOrm()
+	o.Using("default")
+
+
+	type TParams struct {
+		Subject string `json:"subject"`
+		Template string `json:"template"`
+		SmtpFrom string `json:"smtp_from"`
+		SmtpHost string `json:"smtp_host"`
+		SmtpPort string `json:"smtp_port"`
+		SmtpUser string `json:"smtp_user"`
+		SmtpPassword string `json:"smtp_password"`
+
+	}
+	var params TParams
+	err := o.Raw("select t.subject,t.template,ch.smtp_from,ch.smtp_host,ch.smtp_port,ch.smtp_user,ch.smtp_password from di_tasks t,di_chs ch  where t.id=1 and ch.id=t.ch_id").QueryRow(&params)
+		if err != nil {
+			panic(err)
+		}
+
+	m := email.NewHTMLMessage(params.Subject, params.Template)
+
+	m.From = params.SmtpFrom
 	m.To = []string{"yeldar@bk.ru"}
-
-
-//	err := m.Attach("email_test.go")
-//	if err != nil {
-//		panic(err)
-//	}
-
-	//err := email.Send("smtp.mail.ru:587", smtp.PlainAuth("", "kz.bapsdadps", "dasdasdasf2", "smtp.mail.ru"), m)
-	err := email.Send(utils.GetUserParamValue(auth.UserId(req), "smtp_url"),
-		smtp.PlainAuth("", utils.GetUserParamValue(auth.UserId(req), "smtp_user"),
-			utils.GetUserParamValue(auth.UserId(req), "smtp_password"),
-			utils.GetUserParamValue(auth.UserId(req), "smtp_host")), m)
+	err = email.Send(params.SmtpHost +  ":" +params.SmtpPort,
+		smtp.PlainAuth("", params.SmtpUser,
+			params.SmtpPassword,
+			params.SmtpHost), m)
 
 	if err != nil {
 		panic(err)

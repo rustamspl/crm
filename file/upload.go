@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"github.com/julienschmidt/httprouter"
+	"log"
 )
 
 func Upload(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -24,7 +25,7 @@ func Upload(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		fileName := "./uploads/"+handler.Filename;
 		f, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
-			//fmt.Println(err)
+			log.Println(err)
 			fmt.Fprint(w,"{\"result\": \"err\"}")
 			return
 		}

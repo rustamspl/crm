@@ -19,7 +19,13 @@ func init() {
 	log.Println(err)
 	log.Println("openshift_port="+os.Getenv("OPENSHIFT_GO_PORT"))
 
-	orm.RegisterDataBase("default", "mysql", os.Getenv("OPENSHIFT_MYSQL_DB_USERNAME")+":"+os.Getenv("OPENSHIFT_MYSQL_DB_PASSWORD")+"@tcp("+os.Getenv("OPENSHIFT_MYSQL_DB_HOST")+":"+os.Getenv("OPENSHIFT_MYSQL_DB_PORT")+")/golang?charset=utf8")
+	err = orm.RegisterDataBase("default", "mysql", os.Getenv("OPENSHIFT_MYSQL_DB_USERNAME")+":"+os.Getenv("OPENSHIFT_MYSQL_DB_PASSWORD")+"@tcp("+os.Getenv("OPENSHIFT_MYSQL_DB_HOST")+":"+os.Getenv("OPENSHIFT_MYSQL_DB_PORT")+")/golang?charset=utf8")
+	if err!=nil{
+		panic(err)
+	}else{
+		log.Println("ok")
+	}
+
 }
 
 /*type MainController struct {
