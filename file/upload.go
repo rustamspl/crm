@@ -25,7 +25,7 @@ func Upload(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		f, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			fmt.Println(err)
-			fmt.Fprint(w,"{\"result\": \"err\"}")
+			fmt.Fprint(w,"{\"result\": \""+err.Error()+"\"}")
 			return
 		}
 		defer f.Close()
