@@ -21,7 +21,7 @@ func Upload(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		}
 		defer file.Close()
 		//fmt.Fprintf(w, "%v", handler.Header)
-		fileName := "./uploads/"+handler.Filename;
+		fileName := "/tmp/"+handler.Filename;
 		f, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			fmt.Println(err)
