@@ -11,10 +11,9 @@ import (
 func IncomingCallRestApiGet(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 
 	req.ParseForm();
-	log.Println("INCOMING ccid = "+req.Form.Get("ccid"))
-	log.Println("INCOMING channel = "+req.Form.Get("channel"))
-	log.Println("INCOMING answerstate = "+req.Form.Get("answerstate"))
-
+//	log.Println("INCOMING ccid = "+req.Form.Get("ccid"))
+//	log.Println("INCOMING channel = "+req.Form.Get("channel"))
+//	log.Println("INCOMING answerstate = "+req.Form.Get("answerstate"))
 
 	o := orm.NewOrm()
 	o.Using("default")
