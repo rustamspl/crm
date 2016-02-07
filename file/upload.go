@@ -21,7 +21,8 @@ func Upload(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		}
 		defer file.Close()
 		//fmt.Fprintf(w, "%v", handler.Header)
-		fileName := "/tmp/"+handler.Filename;
+
+		fileName := "C:\\save\\"+handler.Filename;
 		f, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			fmt.Println(err)
@@ -36,6 +37,8 @@ func Upload(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		ImportDeal01(w, r, fileName)
 	}	else if r.Form.Get("action")=="import_deals01_xls" {
 		ImportDeal01XLS(w, r, fileName)
+	}else if r.Form.Get("action")=="universalimport" {
+		ImportUniversal(w, r, fileName)
 	}
 
 	if r.Form.Get("action")=="profile_image" {
