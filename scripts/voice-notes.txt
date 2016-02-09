@@ -3,3 +3,4 @@ http://app05.bapps.kz:28080/webapi/originate?{phone=sofia/gateway/telecom/877728
 http://app05.bapps.kz:28080/webapi/originate?{phone=sofia/gsmopen/tele201/87772825520,script=opros.js,testdir=tests/01,q_count=47,test_id=AAA7177121}loopback/9999%20&echo()%22
 http://app05.bapps.kz:28080/webapi/originate?{phone=gsmopen/tele201/87471556171,script=opros.js,testdir=tests/01,q_count=47,test_id=AAA7177121}loopback/9999%20&echo()%22
 http://app05.bapps.kz:28080/webapi/originate?{phone=sofia/gateway/telecom/87055754828,script=opros.js,testdir=tests/01,q_count=47,test_id=AAA7177121NURLAN}loopback/9999%20&echo()%22
+http://app05.bapps.kz:28080/webapi/uuid_broadcast?5c6ae084-ce73-11e5-9568-cdd3ddf23654%20voicemail/vm-goodbye.wav%20both

@@ -48,10 +48,35 @@ func ImportUniversal(w http.ResponseWriter, r *http.Request, fileName string) (e
 		for _, row := range sheet.Rows {
 
 
-			_,err := o.Raw("insert into deals (x_room_count,x_object_price,x_price_meter,title) values (?,?,?,?)",
+			_,err := o.Raw("insert into deals "+
+			"(deal_stage_id,x_object_type,x_deal_type,x_city,x_room_count,x_region,x_address,"+
+			"x_object_price,x_price_meter,x_sq1,x_sq2,x_sq3,x_floor,x_floor_count,x_sost,x_plan,x_year,x_mebel,amount,title) "+
+			" values ("+
+			"(select id from deal_stages where code='notassigned'),"+
+			"(select id from list_values lv where lv.value=? and lv.list_id=4),"+
+			"(select id from list_values lv where lv.value=? and lv.list_id=3),"+
+			"(select id from list_values lv where lv.value=? and lv.list_id=1),"+
+			"?,"+
+			"(select id from list_values lv where lv.value=? and lv.list_id=2),"+
+			"?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+				row.Cells[0].String(),
+				row.Cells[1].String(),
+				row.Cells[2].String(),
 				row.Cells[3].String(),
+				row.Cells[4].String(),
+				row.Cells[5].String(),
 				row.Cells[6].String(),
 				row.Cells[7].String(),
+				row.Cells[8].String(),
+				row.Cells[9].String(),
+				row.Cells[10].String(),
+				row.Cells[11].String(),
+				row.Cells[12].String(),
+				row.Cells[13].String(),
+				row.Cells[14].String(),
+				row.Cells[15].String(),
+				row.Cells[16].String(),
+				row.Cells[19].String(),
 				row.Cells[20].String(),
 			).Exec()
 

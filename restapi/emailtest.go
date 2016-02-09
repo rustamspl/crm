@@ -44,7 +44,8 @@ func EmailTest(res http.ResponseWriter, req *http.Request, _ httprouter.Params) 
 	recId := 0
 	err = o.Raw("select id,address from di_task_recs where task_id=? and status=? limit 1",taskId,0).QueryRow(&recId,&address)
 	if err !=nil{
-		panic(err)
+		//panic(err)
+		return
 	}
 
 	m.From = params.SmtpFrom

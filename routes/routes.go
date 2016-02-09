@@ -59,6 +59,7 @@ func HandleInit(){
 
 	router.GET("/restapi/luatest",restapi.LuaTest)
 	router.GET("/restapi/emailtest",restapi.EmailTest)
+	router.GET("/restapi/autodialog",restapi.AutoDialogRestApiGet)
 	router.POST("/cdr",restapi.Cdr)
 
 	router.GET("/restapi/translates/get",restapi.TranslateRestApiGet)

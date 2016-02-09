@@ -20,6 +20,8 @@ func UserId(req *http.Request) int64{
 	session, _ := store.Get(req, sessionName)
 	if (session.Values["user_id"]==nil){
 		session.Values["user_id"]=int64(0)
+	}else{
+		session.Options.MaxAge =	3600
 	}
 	return session.Values["user_id"].(int64)
 }
@@ -50,7 +52,7 @@ func Login(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
 	o := orm.NewOrm()
 	o.Using("default")
 	session, _ := store.Get(req, sessionName)
-	session.Options.MaxAge =	3600
+	//session.Options.MaxAge =	3600
 	user_id :=int64(0)
 	//err := o.Raw("select id from users u where u.email=? and `password`=?",req.PostForm.Get("email"),req.PostForm.Get("password")).QueryRow(&user_id )
 
