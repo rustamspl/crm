@@ -8,7 +8,81 @@ import (
 	"encoding/json"
 	"github.com/tealeg/xlsx"
 	"github.com/yeldars/crm/restapi"
+
+	"strconv"
+	"strings"
+	"github.com/yeldars/crm/macros"
 )
+
+
+const QueryString = "select ea.code attr_code,ea.list_id,dt.code data_type_code,tm.col_num from im_type_maps tm,entity_attrs ea,data_types dt"+
+" where ea.id=tm.attr_id and dt.id=ea.data_type_id and tm.type_id=? and ea.entity_link_id is null order by tm.col_num"
+
+
+func BuildQuery(importType int) (string){
+
+	type tmyMap struct {
+		AttrCode string `json:"attr_code"`
+		ListId int `json:"list_id"`
+		DataTypeCode string `json:"data_type_code"`
+		ColNum int `json:"col_num"`
+	}
+	var myMap = []tmyMap{}
+	o := orm.NewOrm()
+	o.Using("default")
+
+	TableName := ""
+	err := o.Raw("select code from entities e,im_types it where it.entity_id=e.id and it.id=?",importType).QueryRow(&TableName)
+
+	if err!=nil{
+		panic(err)
+	}
+	_,err = o.Raw(QueryString,importType).QueryRows(&myMap)
+
+	if err!=nil{
+		panic(err)
+	}
+
+	var attrs []string
+	var values []string
+	for _, row := range myMap {
+		log.Println("attrCode="+row.AttrCode)
+		attrs = append(attrs,row.AttrCode)
+		if row.ListId ==0 {
+		values = append(values,"?")
+		}else{
+			values = append(values,"(select id from list_values lv where lv.value=? and lv.list_id="+strconv.Itoa(row.ListId)+")")
+		}
+	}
+
+	return "insert into "+TableName+" ("+strings.Join(attrs,",")+") values ("+strings.Join(values,",")+")"
+}
+
+func BuildValues(importType int,rows *xlsx.Row) ([]string){
+
+	type tmyMap struct {
+		AttrCode string `json:"attr_code"`
+		ListId int64 `json:"list_id"`
+		DataTypeCode string `json:"data_type_code"`
+		ColNum int `json:"col_num"`
+	}
+	var myMap = []tmyMap{}
+	o := orm.NewOrm()
+	o.Using("default")
+	_,err := o.Raw(QueryString,importType).QueryRows(&myMap)
+
+	var values []string
+
+	if err!=nil{
+		log.Println("vata")
+		log.Println(err)
+	}
+	for _, row := range myMap {
+		values = append(values,rows.Cells[row.ColNum].String())
+	}
+
+	return values
+}
 
 func ImportUniversal(w http.ResponseWriter, r *http.Request, fileName string) (error) {
 
@@ -28,157 +102,53 @@ func ImportUniversal(w http.ResponseWriter, r *http.Request, fileName string) (e
 	}
 	defer file.Close()
 
-
 	o := orm.NewOrm()
 	o.Using("default")
-
-	dealStageId := 0
-	o.Raw("select id from deal_stages where code='notassigned'").QueryRow(&dealStageId)
-
-	//accId := int64(0)
-
 
 
 
 	xlFile, err := xlsx.OpenFile(fileName)
 	restapi.CheckPanic(err)
+	template,err := strconv.Atoi(r.Form.Get("template"))
+
+	skipRows := 0
+
+	err = o.Raw("select skip_rows from im_types where id=?",template).QueryRow(&skipRows)
+
+	restapi.CheckPanic(err)
 
 
+
+	sql := BuildQuery(template)
+	log.Println("sql = " + sql)
 	for _, sheet := range xlFile.Sheets {
+		ri := 0
 		for _, row := range sheet.Rows {
 
 
-			_,err := o.Raw("insert into deals "+
-			"(deal_stage_id,x_object_type,x_deal_type,x_city,x_room_count,x_region,x_address,"+
-			"x_object_price,x_price_meter,x_sq1,x_sq2,x_sq3,x_floor,x_floor_count,x_sost,x_plan,x_year,x_mebel,amount,title) "+
-			" values ("+
-			"(select id from deal_stages where code='notassigned'),"+
-			"(select id from list_values lv where lv.value=? and lv.list_id=4),"+
-			"(select id from list_values lv where lv.value=? and lv.list_id=3),"+
-			"(select id from list_values lv where lv.value=? and lv.list_id=1),"+
-			"?,"+
-			"(select id from list_values lv where lv.value=? and lv.list_id=2),"+
-			"?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-				row.Cells[0].String(),
-				row.Cells[1].String(),
-				row.Cells[2].String(),
-				row.Cells[3].String(),
-				row.Cells[4].String(),
-				row.Cells[5].String(),
-				row.Cells[6].String(),
-				row.Cells[7].String(),
-				row.Cells[8].String(),
-				row.Cells[9].String(),
-				row.Cells[10].String(),
-				row.Cells[11].String(),
-				row.Cells[12].String(),
-				row.Cells[13].String(),
-				row.Cells[14].String(),
-				row.Cells[15].String(),
-				row.Cells[16].String(),
-				row.Cells[19].String(),
-				row.Cells[20].String(),
-			).Exec()
+
+			ri ++
+
+			if ri <= skipRows{
+				continue
+			}
+
+
+			rSet,err := o.Raw(sql,BuildValues(template,row)).Exec()
+
 
 			if err==nil{
 				result.OkCnt ++
+				lid,_ := rSet.LastInsertId()
+				macros.RunMacro(template,lid,row)
 			}else{
 				result.ErrCnt++
 				log.Println(err)
 			}
 
-
-			//row.Cells
-
-			/*var element models.Deals
-
-			if len(row.Cells)>6 {
-
-				objType := row.Cells[0].String()
-				dealType := row.Cells[1].String()
-				city := row.Cells[2].String()
-				region := row.Cells[3].String()
-				dscR := row.Cells[4].String()
-				amount,err := row.Cells[5].Float()
-				phone := row.Cells[6].String()
-				phone = strings.Replace(phone, "(", "", -1);
-				phone = strings.Replace(phone, ")", "", -1);
-				phone = strings.Replace(phone, " ", "", -1);
-				phone2 := ""
-
-				if len(row.Cells) > 7 {
-					phone2 = row.Cells[7].String()
-					phone2 = strings.Replace(phone2, "(", "", -1);
-					phone2 = strings.Replace(phone2, ")", "", -1);
-					phone2 = strings.Replace(phone2, " ", "", -1);
-				}
-
-
-				cnt1 := 0
-				cnt2 := 0
-				o.Raw("select count(1) cnt from accountconts where cont=?",phone).QueryRow(&cnt1)
-				o.Raw("select count(1) cnt from accountconts where cont=?",phone2).QueryRow(&cnt2)
-
-				if cnt1+cnt2> 0 {
-					log.Println("Propusk " + phone)
-					result.SkipCnt ++
-					continue
-				} else{
-					var acc models.Accounts
-					acc.Name = "Клиент "+phone
-					accId,_= o.Insert(&acc)
-
-					var phoneT models.Accountconts
-					phoneT.ContTypeId = 1
-					phoneT.AccountId = accId
-					phoneT.Cont = phone
-					o.Insert(&phoneT)
-					if phone2!="" {
-						phoneT.Cont = phone2
-						o.Insert(&phoneT)
-					}
-
-				}
-
-
-				dealTypeValue := 0
-				objTypeValue := 0
-				regionValue := 0
-				cityValue := 0
-
-				o.Raw("select id from list_values where list_id=3 and value=?",dealType).QueryRow(&dealTypeValue)
-				o.Raw("select id from list_values where list_id=4 and value=?",objType).QueryRow(&objTypeValue)
-				o.Raw("select id from list_values where list_id=2 and value=?",region).QueryRow(&regionValue)
-				o.Raw("select id from list_values where list_id=1 and value=?",city).QueryRow(&cityValue)
-
-
-				element.Id = 0
-				element.AccountId = accId
-				element.Amount = 0
-				element.DealStageId = dealStageId
-				element.Title=dscR
-				element.XDealType = dealTypeValue
-				element.XObjectType = objTypeValue
-				element.XCity = cityValue
-				element.Amount = amount
-
-				element.XRegion = regionValue
-				element.XDscr =dscR
-
-				o.Insert(&element)
-				if err==nil{
-					result.OkCnt ++
-				}else{
-					result.ErrCnt++
-					log.Println(err)
-				}
-			}*/
 		}
 	}
-
-
 	result.Result="ok"
-
 	jsonData, err := json.Marshal(result)
 	fmt.Fprint(w,string(jsonData))
 

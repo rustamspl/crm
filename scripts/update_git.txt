@@ -1,3 +1,4 @@
 cd  /usr/local/go/src/github.com/yeldars/crm
 git pull
 go install github.com/yeldars/crm
+
