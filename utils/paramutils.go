@@ -7,7 +7,7 @@ func GetDomainParamValue(domain string , param string ) string{
 	val := ""
 	err:=o.Raw("select dpv.value from domain_param_values dpv,params p,domains d where d.id=dpv.domain_id and p.id=dpv.param_id and d.domain=? and p.code=?",domain,param).QueryRow(&val)
 	if err!=nil	{
-		panic(err)
+		 return GetParamValue(param)
 	}
 	return  val
 }
