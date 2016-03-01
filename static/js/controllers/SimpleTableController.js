@@ -4,6 +4,22 @@ MetronicApp.controller('SimpleTableController', function($rootScope, $scope, $ht
 
 
 
+    $scope.editPage = function(){
+        $http.get('../restapi/query/get?code=pageByCode&param1='+$scope.pageCode).
+        success(function(data) {
+            console.log(data);
+            location.href="#/settings/pagedetails/"+data.items[0].id;
+        });
+    }
+
+    $scope.editQuery = function(){
+        $http.get('../restapi/query/get?code=queryByCode&param1='+$scope.table_name).
+        success(function(data) {
+            console.log(data);
+            location.href="#/settings/querydetails/"+data.items[0].id;
+        });
+    }
+
 
     $scope.getQueryParams = function (qs) {
         qs = qs.split('+').join(' ');
@@ -33,6 +49,8 @@ MetronicApp.controller('SimpleTableController', function($rootScope, $scope, $ht
     $scope.table_name = "accounts";
 
     $scope.init = function(opt){
+        $scope.pageCode = opt.pageCode;
+        //alert($scope.pageCode);
         $scope.currentPage = opt.currentPage;
         $scope.perPage = opt.perPage;
         $scope.table_name = opt.table_name;

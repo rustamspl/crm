@@ -1,3 +1,11 @@
+<li ng-if="((session_roles.admin) && (pageCode))">
+    <a ng-click="editPage()">
+        <i class="fa fa-check-square-o"></i> <translate>Edit Page</translate> </a>
+</li>
+<li ng-if="((session_roles.admin) && (table_name))">
+    <a ng-click="editQuery()">
+        <i class="fa fa-check-square-o"></i> <translate>Edit Query</translate> </a>
+</li>
 <li ng-if="!getSelectRecordState()">
     <a ng-click="selectRecords()">
         <i class="fa fa-check-square-o"></i> <translate>Select records</translate> </a>
