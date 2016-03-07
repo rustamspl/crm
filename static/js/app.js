@@ -244,6 +244,8 @@ MetronicApp.run(['$urlRouter',"$rootScope", '$http',"settings", "$state","cssInj
 
     //Open ACcount
 
+    $rootScope.navigator = navigator;
+
     $rootScope.createAccount= function(caller_id){
         $rootScope.waitCall.show = false;
         window.location.href="#/crm/accountdetails/0?set_caller_id="+caller_id;

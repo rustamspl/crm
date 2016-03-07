@@ -38,7 +38,7 @@
 				<span ng-if="waitCall.account_id" translate>{{waitCall.account_name}} ?</span>
 				<span ng-if="!waitCall.account_id" translate>Unknown Account</span>
 			</li>
-			<li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+			<li ng-if="session_parameters.show_header_notify_bar==1" class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
 				<a href="#" class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown" data-close-others="true">
 				<i class="icon-bell"></i>
 				<span class="badge badge-default">
@@ -152,7 +152,7 @@
 			<!-- END INBOX DROPDOWN -->
 			<!-- BEGIN TODO DROPDOWN -->
 			<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-			<li class="dropdown dropdown-extended dropdown-tasks" id="header_task_bar">
+			<li ng-if="session_parameters.show_header_task_bar==1" class="dropdown dropdown-extended dropdown-tasks" id="header_task_bar">
 				<a href="#" class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown" data-close-others="true">
 				<i class="icon-calendar"></i>
 				<span class="badge badge-default">
@@ -249,7 +249,7 @@
 			<!-- END TODO DROPDOWN -->
 			<!-- BEGIN LANGUAGE BAR -->
 			<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-			<li class="dropdown dropdown-language">
+			<li ng-if="session_parameters.show_header_language_bar==1" class="dropdown dropdown-language">
 				<a href="#" class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown" data-close-others="true">
 				<img alt="" src='theme/assets/global/img/flags/{{"CurrentLanguageICON" | translate}}.png'>
 				<span class="langname">
@@ -298,13 +298,13 @@
 							<a href="#">
 							<i class="icon-calendar"></i> {{"My Calendar" | translate}} </a>
 						</li>-->
-						<li>
+						<li ng-if="session_parameters.show_header_inbox==1">
 							<a href="#">
 							<i class="icon-envelope-open"></i> {{"My Inbox" | translate}} <span class="badge badge-danger">
 							3 </span>
 							</a>
 						</li>
-						<li>
+						<li ng-if="session_parameters.show_header_tasks==1">
 							<a href="#/crm/tasks">
 							<i class="icon-rocket"></i> {{"My Tasks" | translate}} <span class="badge badge-success">
 							7 </span>
@@ -318,7 +318,7 @@
 						</li>-->
 						<li>
 							<a href="../auth/logout">
-							<i class="icon-key"></i> {{"Log Out" | translate}}  </a>
+							<i class="icon-key"></i> {{"Log Out" | translate}}  {{navigator.platform}}</a>
 						</li>
 				</ul>
 			</li>

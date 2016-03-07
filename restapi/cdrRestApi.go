@@ -42,7 +42,7 @@ func Cdr(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	decoder := json.NewDecoder(r.Body)
 	var t CDRQueryGetResponse
 	err := decoder.Decode(&t)
-	log.Println("BEBEBE 1")
+	//log.Println("BEBEBE 1")
 
 
 
@@ -50,9 +50,9 @@ func Cdr(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	for _,value := range t.Items {
 
-		start_stamp,_ := value["start_stamp"].(string)
-		log.Println( value["start_stamp"])
-		log.Println(start_stamp)
+		//start_stamp,_ := value["start_stamp"].(string)
+		//log.Println( value["start_stamp"])
+		//log.Println(start_stamp)
 		_,errrr := o.Raw("insert into col_calls "+
 		"(ext_id,local_ip_v4,caller_id_name,caller_id_number,"+
 
@@ -127,7 +127,7 @@ func Cdr(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	"(select max(ac.account_id) from accountconts ac where ac.cont=concat('7',substr(c.destination_number,2,255)) )"+
 	"").Exec()
 
-	log.Println("BEBEBE 2")
+	//log.Println("BEBEBE 2")
 
 
 
