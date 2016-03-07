@@ -3,17 +3,6 @@ B-APPS CRM
 
 This is First Readme File
 
-#Dependences
-
-github.com/beego/bee<br /> 
-github.com/astaxie/beego<br /> 
-github.com/go-sql-driver/mysql<br /> 
-github.com/astaxie/beego/orm<br /> 
-golang.org/x/crypto<br /> 
-github.com/Shopify/go-lua<br /> 
-github.com/tealeg/xlsx<br /> 
-
-
 
 #Quick install
 
@@ -45,8 +34,6 @@ cd go-sql-driver<br />
 git clone https://github.com/go-sql-driver/mysql.git<br />
 cd ..<br />
 
-
-
 mkdir Shopify<br />
 cd Shopify<br />
 git clone https://github.com/Shopify/go-lua.git<br />
@@ -71,6 +58,15 @@ git clone  https://github.com/gorilla/context.git<br />
 git clone  https://github.com/gorilla/securecookie.git<br />
 cd ..<br />
 
+mkdir boombuler<br />
+cd boombuler<br />
+git clone  https://github.com/boombuler/barcode.git<br />
+cd ..<br />
+
+mkdir jung-kurt<br />
+cd jung-kurt<br />
+git clone  https://github.com/jung-kurt/gofpdf.git<br />
+cd ..<br />
 
 mkdir yeldars<br />
 cd yeldars<br />

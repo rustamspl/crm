@@ -53,17 +53,17 @@ func MenuRestApiGetTree(res http.ResponseWriter, req *http.Request, _ httprouter
 	",(select en from translates t where t.code=m.title limit 1) title_en "+
 	",(select ru from translates t where t.code=m.title limit 1) title_ru "+
 	",(select kk from translates t where t.code=m.title limit 1) title_kk "+
-	",(select count(1) from menus mmm where mmm.id_hi=m.id) cnt_child "+
-	" FROM menus m where m.id_hi is null and m.active=? "+
-	"and exists (select 1 from role_menus rm,user_roles ur where rm.role_id=ur.role_id and ur.user_id=? and m.id=rm.menu_id) order by m.position",1,auth.UserId(req)).QueryRows(&arr)
+	",(select count(1) from menus mmm where mmm.id_hi=m.id and mmm.active=1) cnt_child "+
+	" FROM menus m where m.id_hi is null and m.active=1 "+
+	"and exists (select 1 from role_menus rm,user_roles ur where rm.role_id=ur.role_id and ur.user_id=? and m.id=rm.menu_id) order by m.position",auth.UserId(req)).QueryRows(&arr)
 
 	for index,element := range arr {
 		o.Raw("SELECT m.*"+
 		",(select en from translates t where t.code=m.title limit 1) title_en "+
 		",(select ru from translates t where t.code=m.title limit 1) title_ru "+
 		",(select kk from translates t where t.code=m.title limit 1) title_kk "+
-		" FROM menus m where m.id_hi=? and m.active=? "+
-		"and exists (select 1 from role_menus rm,user_roles ur where rm.role_id=ur.role_id and ur.user_id=? and m.id=rm.menu_id) order by m.position",element.Id,1,auth.UserId(req)).QueryRows(&subArr)
+		" FROM menus m where m.id_hi=? and m.active=1 "+
+		"and exists (select 1 from role_menus rm,user_roles ur where rm.role_id=ur.role_id and ur.user_id=? and m.id=rm.menu_id) order by m.position",element.Id,auth.UserId(req)).QueryRows(&subArr)
 		arr[index].Items = subArr
 	}
 

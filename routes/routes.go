@@ -74,6 +74,8 @@ func HandleInit(){
 	router.POST("/upload",file.Upload)
 	router.GET("/exportall",file.ExportAll)
 
+	router.GET("/pdftest",file.TestPDF)
+
 	bind := fmt.Sprintf("%s:%s", os.Getenv("OPENSHIFT_GO_IP"), os.Getenv("OPENSHIFT_GO_PORT"))
 	//err := http.ListenAndServe(bind, nil)
 	log.Fatal(http.ListenAndServe(bind, router))
