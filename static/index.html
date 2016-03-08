@@ -75,7 +75,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
 	<!-- BEGIN HEADER -->
 
-	<div ng-if="session_parameters.show_header==1"  data-ng-include="'tpl/header.html'" data-ng-controller="HeaderController" class="page-header navbar navbar-fixed-top">
+	<div ng-if="!isMobile"  data-ng-include="'tpl/header.html'" data-ng-controller="HeaderController" class="page-header navbar navbar-fixed-top">
 	</div>
 	<!-- END HEADER -->
 
@@ -115,7 +115,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<!-- END CONTAINER -->
 
 	<!-- BEGIN FOOTER -->
-	<div data-ng-include="'tpl/footer.html'" data-ng-controller="FooterController" class="page-footer">
+	<div ng-if="!isMobile" data-ng-include="'tpl/footer.html'" data-ng-controller="FooterController" class="page-footer">
 	</div>
 	<!-- END FOOTER -->
 

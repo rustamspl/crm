@@ -3,8 +3,8 @@
 <div class="page-header-inner">
 	<!-- BEGIN LOGO -->
 	<div class="page-logo">
-		<a href="#/">  
-		<img src="theme/assets/admin/layout/img/logo.png" alt="logo" id="logoHeader" class="logo-default"/>
+		<a href="#/">
+		<div class="logo-default"></div>
 		</a>
 		<div class="menu-toggler sidebar-toggler">
 			<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -279,10 +279,10 @@
 			<!-- BEGIN USER LOGIN DROPDOWN -->
 			<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
 			<li class="dropdown dropdown-user">
-				<a href="#" class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown" data-close-others="true">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true">
 				<img alt="" class="img-circle" src="../userpic?id={{sessioninfo.id}}"/>
 				<span class="username username-hide-on-mobile">
-				{{sessioninfo.name}} </span>
+				{{sessioninfo.name}}</span>
 				<i class="fa fa-angle-down"></i>
 				</a>
 				<ul class="dropdown-menu dropdown-menu-default">
@@ -318,7 +318,7 @@
 						</li>-->
 						<li>
 							<a href="../auth/logout">
-							<i class="icon-key"></i> {{"Log Out" | translate}}  {{navigator.platform}}</a>
+							<i class="icon-key"></i> {{"Log Out" | translate}}</a>
 						</li>
 				</ul>
 			</li>

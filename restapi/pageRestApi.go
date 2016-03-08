@@ -7,6 +7,8 @@ import (
 	"encoding/json"
 	"strconv"
 	"github.com/julienschmidt/httprouter"
+	"github.com/yeldars/crm/auth"
+	"log"
 )
 
 
@@ -76,6 +78,28 @@ func PageRestApiGet(res http.ResponseWriter, req *http.Request, _ httprouter.Par
 
 }
 
+func CheckGrantToPage(userId int64,pageId string) bool{
+
+	o := orm.NewOrm()
+	o.Using("default")
+
+	 cnt := 0
+	err := o.Raw("select count(1) cnt from pages p,role_pages rp,user_roles ur where ur.user_id=? and ur.role_id=rp.role_id and p.id=rp.page_id and p.id=?",userId,pageId).QueryRow(&cnt)
+	CheckPanic(err)
+	log.Println(cnt)
+	return cnt>0
+}
+
+func CheckGrantToPageCode(userId int64,pageCode string) bool{
+	o := orm.NewOrm()
+	o.Using("default")
+
+	cnt := 0
+	err := o.Raw("select count(1) cnt from pages p,role_pages rp,user_roles ur where ur.user_id=? and ur.role_id=rp.role_id and p.id=rp.page_id and p.code=?",userId,pageCode).QueryRow(&cnt)
+	CheckPanic(err)
+	log.Println(cnt)
+	return cnt>0
+}
 
 func PageRestApiGetPageTemplate(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
 
@@ -92,11 +116,27 @@ func PageRestApiGetPageTemplate(res http.ResponseWriter, req *http.Request, _ ht
 
 	if req.Form.Get("id")!="" {
 		err1 := o.Raw("SELECT p.template FROM pages p where p.id=?", req.Form.Get("id")).QueryRow(&s)
-		RestCheckDBPanic(err1,res,o)
+		if err1 != nil {
+			err1 := o.Raw("SELECT p.template FROM pages p where p.code=?","404").QueryRow(&s)
+			RestCheckDBPanic(err1,res,o)
+		}
+
+		if !CheckGrantToPage(auth.UserId(req),req.Form.Get("id")){
+			err1 := o.Raw("SELECT p.template FROM pages p where p.code=?","403").QueryRow(&s)
+			RestCheckDBPanic(err1,res,o)
+		}
+
 		fmt.Fprint(res,s)
 	}	else if req.Form.Get("code")!="" {
 		err2 := o.Raw("SELECT p.template FROM pages p where p.code=?", req.Form.Get("code")).QueryRow(&s)
-		RestCheckDBPanic(err2,res,o)
+		if err2 != nil {
+			err2 := o.Raw("SELECT p.template FROM pages p where p.code=?","404").QueryRow(&s)
+			RestCheckDBPanic(err2,res,o)
+		}
+		if !CheckGrantToPageCode(auth.UserId(req),req.Form.Get("code")){
+			err1 := o.Raw("SELECT p.template FROM pages p where p.code=?","403").QueryRow(&s)
+			RestCheckDBPanic(err1,res,o)
+		}
 		fmt.Fprint(res,s)
 	}
 

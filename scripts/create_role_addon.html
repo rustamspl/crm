@@ -1,0 +1,82 @@
+
+
+
+select
+ r.id role_id,r.title ,case when rm.role_id is null then '0' else '1' end enable,
+  rm.id role_query_id
+from roles r
+left join role_queries rm on rm.role_id=r.id and rm.query_id=?
+order by 1
+
+
+
+
+								<div ng-if="detail.id!=0">
+									<h4 translate>Available Roles</h4>
+									<div ng-repeat="rm in role_queries" class="col-md-4">
+										<checkbox ng-change="changeRole(rm)" ng-true-value="1"   ng-false-value="0"  ng-model="rm.enable" />
+										<label  translate>{{rm.title}}</label>
+									</div>
+								</div>
+								
+				if ($stateParams.id!=0) {
+					$scope.detail = data.queries[0];
+					$scope.role_queries = data.role_queries;
+				}
+				
+		$scope.deleteRolequeryItems = function(){
+			var deleteValues = [];
+			if ($scope.detail.id != 0) {
+				$scope.role_queries.forEach(function (item, i, arr) {
+					//alert( i + ": " + item + " (массив:" + arr + ")" );
+					if ((item.role_query_id != null) && (item.changed)) {
+						deleteValues.push({id: item.role_query_id});
+						console.log("Удалено " + item.role_query_id);
+					}
+				});
+			}
+			return {table_name:"role_queries", action:"delete",values:deleteValues};
+		}
+
+		$scope.insertRolequeryItems = function(query_id){
+			var insertValues = [];
+			if ($scope.detail.id != 0) {
+				$scope.role_queries.forEach(function (item, i, arr) {
+					//alert( i + ": " + item + " (массив:" + arr + ")" );
+					if ((item.enable == 1) && (item.role_query_id == null) && (item.changed)) {
+						insertValues.push({role_id: item.role_id, query_id: query_id});
+						console.log("Добавлено " + item.role_id);
+					}
+				});
+			}
+			return {table_name:"role_queries", action:"insert",values:insertValues};
+		}
+		
+		$scope.changeRole = function(rm){
+			rm.changed = true;
+			$scope.edit();
+		}		
+		
+DMLService.update( [ $scope.deleteRolequeryItems(),  $scope.insertRolequeryItems($scope.detail.id), {table_name:"queries",action:$scope.action, values: [$scope.detail]}     ]).		
+
+
+		$scope.save = function save(){
+			$scope.detail.query_type_id = $scope.detail._query_type_select.id;
+
+			DMLService.update(  [ $scope.deleteRolequeryItems(),  $scope.insertRolequeryItems($scope.detail.id), {table_name:$scope.table_name,action:$scope.detail.id == 0 ? "insert":"update", values: [$scope.detail]}  ]).
+				success(function (data) {
+					if (data.error!="0") {
+						alert(data.error_text);
+						return;
+					}
+					if ($scope.detail.id == 0) {
+						data.items.forEach(function (item, i, arr) {
+							if (item.table_name==$scope.table_name){
+								location.href = $scope.detail_href + item.last_insert_id;
+							}
+						});
+					}else{
+						$scope.bind();
+					}
+				});
+			}

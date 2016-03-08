@@ -48,6 +48,7 @@ func HandleInit(){
 	router.GET("/restapi/incomingcall",restapi.IncomingCallRestApiGet)
 
 
+	router.POST("/restapi/login",restapi.Login)
 	router.GET("/userpic",file.UserPic)
 	router.POST("/auth/login",auth.Login)
 	router.GET("/auth/session_info",auth.GetSessionInfo)
@@ -66,6 +67,7 @@ func HandleInit(){
 	router.GET("/restapi/pages/get",restapi.PageRestApiGet)
 	router.GET("/restapi/pagetemplate",restapi.PageRestApiGetPageTemplate)
 	router.GET("/restapi/widgettemplate",restapi.WidgetRestApiGetWidgetTemplate)
+	router.POST("/restapi/generateddl",restapi.GenerateDDL)
 
 	router.GET("/showpage",restapi.PageRestApiGetPageTemplate)
 

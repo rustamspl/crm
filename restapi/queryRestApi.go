@@ -12,6 +12,7 @@ import (
 )
 
 type queryGetResponse struct {
+	IsMobile bool `json:"isMobile"`
 	PageCount   int `json:"pageCount"`
 	Error      string `json:"error"`
 	Items [] orm.Params`json:"items"`
@@ -31,6 +32,8 @@ func QueryRestApiGet(res http.ResponseWriter, req *http.Request, _ httprouter.Pa
 	var arr [] orm.Params
 
 	req.ParseForm()
+
+
 	limitFrom := "1"
 	limitTo := "5"
 
@@ -98,10 +101,16 @@ func QueryRestApiGet(res http.ResponseWriter, req *http.Request, _ httprouter.Pa
 		_, err = o.Raw(sql + " limit ?,?", formArray, filterArray, limitFrom, limitTo).Values(&arr)
 	}
 	respO := queryGetResponse{}
+
+	respO.IsMobile = IsMobile(req)
+
 	respO.Items = arr
 	respO.Error = "0"
 	respO.PageCount = pageCount
 	jsonData, err := json.Marshal(respO)
+
+
+
 	if RestCheckDBPanic(err ,res ,o ) {
 		return
 	}

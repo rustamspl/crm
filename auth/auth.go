@@ -14,16 +14,29 @@ import (
 
 var store = sessions.NewCookieStore([]byte("asdjkjkl39090wejiosdfklo"))
 
-var sessionName = "BAPPSSessionId"
+var SessionName = "BAPPSSessionId"
 
+func GetStore() * sessions.CookieStore{
+	return store
+}
 func UserId(req *http.Request) int64{
-	session, _ := store.Get(req, sessionName)
+	session, _ := store.Get(req, SessionName)
 	if (session.Values["user_id"]==nil){
 		session.Values["user_id"]=int64(0)
 	}else{
-		session.Options.MaxAge =	3600
+		//session.Options.MaxAge =	3600
 	}
 	return session.Values["user_id"].(int64)
+}
+
+func System(req *http.Request) string{
+	session, _ := store.Get(req, SessionName)
+	if (session.Values["system"]==nil){
+		session.Values["system"]=""
+	}else{
+		//session.Options.MaxAge =	3600
+	}
+	return session.Values["system"].(string)
 }
 
 type SessionInfo struct {
@@ -41,17 +54,10 @@ func Login(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
 
 	req.ParseForm();
 
-
-
-	// Set some session values.
-
-	// Save it before we write to the response/return from the handler.
-
-
 	DoLoginLog(UserId(req),1)
 	o := orm.NewOrm()
 	o.Using("default")
-	session, _ := store.Get(req, sessionName)
+	session, _ := store.Get(req, SessionName)
 	//session.Options.MaxAge =	3600
 	user_id :=int64(0)
 	//err := o.Raw("select id from users u where u.email=? and `password`=?",req.PostForm.Get("email"),req.PostForm.Get("password")).QueryRow(&user_id )
@@ -80,7 +86,7 @@ func Login(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
 
 
 func GetLanguage2(req *http.Request) string{
-	session, _ := store.Get(req, sessionName)
+	session, _ := store.Get(req, SessionName)
 	if (session.Values["lang"]==nil){
 		session.Values["lang"]="ru"
 	}
@@ -90,14 +96,14 @@ func GetLanguage2(req *http.Request) string{
 
 
 func GetLanguage(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
-	session, _ := store.Get(req, sessionName)
+	session, _ := store.Get(req, SessionName)
 	//req.ParseForm();
 
 	fmt.Fprint(res, "{\"lang\":\""+ session.Values["lang"].(string) + "\"}")
 }
 
 func SetLanguage(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
-	session, _ := store.Get(req, sessionName)
+	session, _ := store.Get(req, SessionName)
 	req.ParseForm();
 	session.Values["lang"]=req.Form.Get("lang")
 	//fmt.Fprint(res,"TEST"+req.Form.Get("lang"))
@@ -107,7 +113,7 @@ func SetLanguage(res http.ResponseWriter, req *http.Request, _ httprouter.Params
 func Logout(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
 
 	DoLoginLog(UserId(req),2)
-	session, _ := store.Get(req, sessionName)
+	session, _ := store.Get(req, SessionName)
 	session.Values["user_id"] = int64(0)
 	session.Save(req, res)
 
