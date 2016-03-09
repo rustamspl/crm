@@ -28,6 +28,8 @@ func init() {
 
 }
 
+
+
 /*type MainController struct {
 	beego.Controller
 }
