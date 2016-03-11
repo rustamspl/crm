@@ -8,6 +8,61 @@ import (
 
 var db = os.Getenv("OPENSHIFT_APP_NAME")
 
+func CheckEntity(entityCode string) bool{
+
+	o := orm.NewOrm()
+	o.Using("default")
+	ok := 0
+	err := o.Raw("select 1 from entities where code=?",entityCode).QueryRow(&ok)
+	return err == nil && ok == 1
+
+
+/*	func main() {
+		var validID = regexp.MustCompile(`^[a-z|0-9]+$`)
+		fmt.Println(validID.MatchString("1sal/em"))
+	}*/
+}
+func doCreateUQIndexes(entityCode string)(error){
+
+	sql :=
+	`select concat ( 'CREATE UNIQUE INDEX ', concat(e.code,'_',ea.code, '_uindex'),' ON ', e.code , ' (', ea.code,')' ) res from entity_attrs ea,entities e where e.id=ea.entity_id and ea.uq='1'
+	and e.code=?
+and not exists(
+SELECT *
+FROM information_schema.TABLE_CONSTRAINTS
+WHERE constraint_type = 'UNIQUE' and table_schema=?
+and constraint_name=concat(e.code,'_',ea.code, '_uindex') COLLATE utf8_unicode_ci
+)`
+
+	o := orm.NewOrm()
+	o.Using("default")
+	log.Println(sql)
+	type addFieldsRows struct {
+		Res string `json:"res"`
+	}
+	var ws = [] addFieldsRows{}
+	//log.Println(sql)
+	_,err:= o.Raw(sql, entityCode,db).QueryRows(&ws)
+
+	if err != nil {
+		log.Println("vata")
+		return err
+	}
+	for _,element := range ws {
+		if element.Res==""{
+			log.Println("CONTINUE")
+			continue
+		}
+		sql := element.Res
+		log.Println("#################"+sql)
+		_,err := o.Raw(sql).Exec();
+		if err!=nil{
+			return err
+		}
+	}
+	return err
+
+}
 
 func doAlterAddFields(entityCode string)(error){
 
@@ -130,6 +185,11 @@ func GenerateDDL(entityCode string) error{
 		if err != nil {
 			return err
 		}
+	}
+
+	err :=  doCreateUQIndexes(entityCode)
+	if err!=nil{
+		return err
 	}
 	return nil
 }

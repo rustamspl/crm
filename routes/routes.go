@@ -78,6 +78,13 @@ func HandleInit(){
 
 	router.GET("/pdftest",file.TestPDF)
 
+	router.POST("/restapi/invoiceRestApi",restapi.InvoiceCreateRestApi)
+	router.POST("/restapi/importStandartReference/",restapi.ImportStandartReferenceRestApi)
+	router.POST("/restapi/importAdvancedReference/",restapi.ImportAdvancedReferenceRestApi)
+
+
+
+
 	bind := fmt.Sprintf("%s:%s", os.Getenv("OPENSHIFT_GO_IP"), os.Getenv("OPENSHIFT_GO_PORT"))
 	//err := http.ListenAndServe(bind, nil)
 	log.Fatal(http.ListenAndServe(bind, router))
