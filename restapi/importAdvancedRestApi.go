@@ -13,14 +13,11 @@ import (
 
 func ImportAdvancedReferenceRestApi(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 
-	type referenceElement struct {
-		Code string `json:"code"`
-		Name string `json:"name"`
-	}
+
 
 	type referenceImportRequest struct {
 		Entity string `json:"entity"`
-		ReferenceElements []referenceElement `json:"referenceElements"`
+		ReferenceElements []orm.Params `json:"referenceElements"`
 	}
 
 	type referenceImportResponse struct {
@@ -61,19 +58,19 @@ func ImportAdvancedReferenceRestApi(res http.ResponseWriter, req *http.Request, 
 
 			sqlCnt := "select count(1) cnt from " + regexp.QuoteMeta(t.Entity) + " where code=?";
 			cnt := 0
-			err := o.Raw(sqlCnt, element.Code).QueryRow(&cnt)
+			err := o.Raw(sqlCnt, element["code"]).QueryRow(&cnt)
 
 			if cnt > 0 {
 				if t.Entity == "accounts" {
-					sql := "update " + regexp.QuoteMeta(t.Entity) + " set title=? where code=?";
-					_, err = o.Raw(sql, element.Name, element.Code).Exec()
+					sql := "update " + regexp.QuoteMeta(t.Entity) + " set title=?,bin=? where code=?";
+					_, err = o.Raw(sql, element["title"],element["bin"], element["code"]).Exec()
 				}
 				if err == nil {
 					resP.UpdateCount ++
 				}
 			}else {
 				if t.Entity == "accounts" {
-					_, err = o.Raw("insert into " + regexp.QuoteMeta(t.Entity) + " (code,name) values (?,?)", element.Code, element.Name).Exec()
+					_, err = o.Raw("insert into " + regexp.QuoteMeta(t.Entity) + " (code,title,bin) values (?,?,?)", element["code"], element["title"], element["bin"]).Exec()
 				}
 
 				if err == nil {

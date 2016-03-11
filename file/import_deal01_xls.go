@@ -53,20 +53,20 @@ func ImportDeal01XLS(w http.ResponseWriter, r *http.Request, fileName string) (e
 
 			if len(row.Cells)>6 {
 
-				objType := row.Cells[0].String()
-				dealType := row.Cells[1].String()
-				city := row.Cells[2].String()
-				region := row.Cells[3].String()
-				dscR := row.Cells[4].String()
+				objType,err := row.Cells[0].String()
+				dealType,err := row.Cells[1].String()
+				city,err := row.Cells[2].String()
+				region,err := row.Cells[3].String()
+				dscR,err := row.Cells[4].String()
 				amount,err := row.Cells[5].Float()
-				phone := row.Cells[6].String()
+				phone,err := row.Cells[6].String()
 				phone = strings.Replace(phone, "(", "", -1);
 				phone = strings.Replace(phone, ")", "", -1);
 				phone = strings.Replace(phone, " ", "", -1);
 				phone2 := ""
 
 				if len(row.Cells) > 7 {
-					phone2 = row.Cells[7].String()
+					phone2,err = row.Cells[7].String()
 					phone2 = strings.Replace(phone2, "(", "", -1);
 					phone2 = strings.Replace(phone2, ")", "", -1);
 					phone2 = strings.Replace(phone2, " ", "", -1);

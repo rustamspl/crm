@@ -78,7 +78,8 @@ func BuildValues(importType int,rows *xlsx.Row) ([]string){
 		log.Println(err)
 	}
 	for _, row := range myMap {
-		values = append(values,rows.Cells[row.ColNum].String())
+		str,_ := rows.Cells[row.ColNum].String()
+		values= append(values,str)
 	}
 
 	return values
