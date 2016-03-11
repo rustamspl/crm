@@ -7,13 +7,10 @@ import (
 	"log"
 	"io/ioutil"
 	"github.com/astaxie/beego/orm"
-	"regexp"
 	"github.com/yeldars/crm/utils"
 )
 
 func ImportAdvancedReferenceRestApi(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-
-
 
 	type referenceImportRequest struct {
 		Entity string `json:"entity"`
@@ -53,36 +50,24 @@ func ImportAdvancedReferenceRestApi(res http.ResponseWriter, req *http.Request, 
 		resP.ErrorTexts += "Entity Not Found"
 	}else {
 		for _, element := range t.ReferenceElements {
-
-
-
-			sqlCnt := "select count(1) cnt from " + regexp.QuoteMeta(t.Entity) + " where code=?";
+			sqlCnt := "select count(1) cnt from " + t.Entity + " where code=?";
 			cnt := 0
 			err := o.Raw(sqlCnt, element["code"]).QueryRow(&cnt)
-
 			if cnt > 0 {
-				if t.Entity == "accounts" {
-					sql := "update " + regexp.QuoteMeta(t.Entity) + " set title=?,bin=? where code=?";
-					_, err = o.Raw(sql, element["title"],element["bin"], element["code"]).Exec()
-				}
+				_, err = AdvancedImportCaseUpdate(t.Entity,o,element)
 				if err == nil {
 					resP.UpdateCount ++
 				}
 			}else {
-				if t.Entity == "accounts" {
-					_, err = o.Raw("insert into " + regexp.QuoteMeta(t.Entity) + " (code,title,bin) values (?,?,?)", element["code"], element["title"], element["bin"]).Exec()
-				}
-
+				_, err = AdvancedImportCaseInsert(t.Entity,o,element)
 				if err == nil {
 					resP.InsertCount ++
 				}
 			}
-
 			if err != nil {
 				resP.ErrorCount ++
 				resP.ErrorTexts += err.Error()
 			}
-
 		}
 	}
 
