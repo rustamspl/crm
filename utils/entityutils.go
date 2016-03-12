@@ -4,11 +4,18 @@ import (
 	"os"
 	"log"
 
+	"regexp"
 )
 
 var db = os.Getenv("OPENSHIFT_APP_NAME")
 
-func CheckEntity(entityCode string) bool{
+func CheckTableRegexp(entityCode string) bool {
+	var validID = regexp.MustCompile(`^[a-z|0-9|\_]+$`)
+	return validID.MatchString(entityCode)
+
+}
+
+func CheckEntity(entityCode interface{}) bool{
 
 	o := orm.NewOrm()
 	o.Using("default")
