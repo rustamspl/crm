@@ -41,37 +41,59 @@ func ImportAdvancedReferenceRestApi(res http.ResponseWriter, req *http.Request, 
 	}
 
 
+	var entityPriors map[string]int
+	entityPriors = make(map[string]int)
+
+	entityPriors["accounts"] = 1
+	entityPriors["bi_deals"] = 2
+	entityPriors["bi_addresses"] = 10
+	entityPriors["bi_nomens"] = 10
+	entityPriors["bi_mobilities"] = 10
+	entityPriors["bi_constructions"] = 10
+	entityPriors["contacts"] = 2
+	entityPriors["bi_ind_sites"] = 10
+	entityPriors["bi_vehicles"] = 5
+	entityPriors["bi_vehicle_vids"] = 4
+	entityPriors["bi_drivers"] = 4
+
 	var resP referenceImportResponse
 
 	o := orm.NewOrm()
 	o.Using("default")
-
-	for _, element := range t.Entities {
-			entity := element["entity"].(string)
-			if utils.CheckTableRegexp(entity) {
-				sqlCnt := "select count(1) cnt from " + entity + " where code=?";
-				cnt := 0
-				err := o.Raw(sqlCnt,element["code"]).QueryRow(&cnt)
-				if cnt > 0 {
-					_, err = AdvancedImportCaseUpdate(entity, o, element)
-					if err == nil {
-						resP.UpdateCount ++
+	for i := 1; i <= 10; i++ {
+		for _, element := range t.Entities {
+		entity := element["entity"].(string)
+			if entityPriors[entity]==i {
+				log.Println("@@@@@@@@@@@@ process "+entity)
+				if utils.CheckTableRegexp(entity) {
+					sqlCnt := "select count(1) cnt from " + entity + " where code=?";
+					cnt := 0
+					err := o.Raw(sqlCnt, element["code"]).QueryRow(&cnt)
+					if cnt > 0 {
+						_, err = AdvancedImportCaseUpdate(entity, o, element)
+						if err == nil {
+							resP.UpdateCount ++
+						}
+					}else {
+						_, err = AdvancedImportCaseInsert(entity, o, element)
+						if err == nil {
+							resP.InsertCount ++
+						}
+					}
+					if err != nil {
+						resP.ErrorCount ++
+						resP.ErrorTexts += err.Error() + " in " + entity + "\n"
 					}
 				}else {
-					_, err = AdvancedImportCaseInsert(entity, o, element)
-					if err == nil {
-						resP.InsertCount ++
-					}
-				}
-				if err != nil {
 					resP.ErrorCount ++
-					resP.ErrorTexts += err.Error()+" in "+entity+ "\n"
+					resP.ErrorTexts += "Invalid tablename \"" + entity + "\"\n"
 				}
-			}else{
-				resP.ErrorCount ++
-				resP.ErrorTexts += "Invalid tablename \""+entity+"\"\n"
+				//break;
 			}
+		}
+
 	}
+
 	resP.DeleteCount = 0
 	resP.SkipCount = 0
 	j, _ := json.Marshal(resP)

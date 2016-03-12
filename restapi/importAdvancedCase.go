@@ -30,7 +30,7 @@ func AdvancedImportCaseUpdate(entityCode string, o orm.Ormer , element orm.Param
 	}else if 	entityCode == "bi_vehicles"  {
 		sql := "update " + entityCode + " set title=?,vechicle_type_id=(select id from bi_vehicle_vids where code=?) where code=?";
 		return o.Raw(sql, element["title"], element["bi_vid_ts_code"], element["code"]).Exec()
-	}else if 	entityCode == "bi_vehicles_vids"  {
+	}else if 	entityCode == "bi_vehicle_vids"  {
 		sql := "update " + entityCode + " set title=?,bi_tip_ts_code=?,volume=? where code=?";
 		return o.Raw(sql, element["title"], element["bi_tip_ts_code"],element["volume"], element["code"]).Exec()
 	} else{
