@@ -46,7 +46,7 @@ func ImportAdvancedReferenceRestApi(res http.ResponseWriter, req *http.Request, 
 
 	entityPriors["accounts"] = 1
 	entityPriors["bi_deals"] = 2
-	entityPriors["bi_addresses"] = 10
+	entityPriors["bi_addresses"] = 1
 	entityPriors["bi_nomens"] = 10
 	entityPriors["bi_mobilities"] = 10
 	entityPriors["bi_constructions"] = 10
@@ -55,6 +55,9 @@ func ImportAdvancedReferenceRestApi(res http.ResponseWriter, req *http.Request, 
 	entityPriors["bi_vehicles"] = 5
 	entityPriors["bi_vehicle_vids"] = 4
 	entityPriors["bi_drivers"] = 4
+	entityPriors["bi_gosnum"] = 6
+	entityPriors["bi_individuals"] = 10
+
 
 	var resP referenceImportResponse
 
