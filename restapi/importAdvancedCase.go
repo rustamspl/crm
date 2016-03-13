@@ -44,6 +44,76 @@ func AdvancedImportCaseUpdate(entityCode string, o orm.Ormer , element orm.Param
 	}else if 	entityCode == "bi_individuals"  {
 		sql := "update " + entityCode + " set title=?,lastname=?,firstname=?,middlename=?,position=?,rolset=? where code=?";
 		return o.Raw(sql, element["title"], element["lastname"],element["firstname"],element["middlename"],element["position"],element["rolset"], element["code"]).Exec()
+	}else if 	entityCode == "bi_beton_invoices"  {
+		/*                START BETON INVOICE DOCUMENT */
+		/*                ****************       */
+		sql := "update " + entityCode + `
+		set
+			doc_at=?,
+		 	account_id=(select id from accounts where code=?),
+		 	ind_site_id=(select id from bi_ind_sites where code=?),
+		 	deal_id=(select id from bi_deals where code=?),
+		 	seal=?,
+		 	is_central=?,
+		 	delivery_address_id=(select id from bi_addresses where code=?),
+		 	driver_id=(select id from bi_drivers where code=?),
+		 	apt_account_id=(select id from accounts where code=?),
+		 	vehicle_id=(select id from bi_vehicles where code=?),
+		 	delivery_type=?,
+		 	departure_at=?,
+		 	beton_req_id=(select id from bi_beton_reqs where code=?),
+		 	shipped_quantity=?,
+		 	dscr=?,
+		 	mod_nomen_id=(select id from bi_nomens where code=?),
+		 	addon_nomen_id=(select id from bi_nomens where code=?),
+		 	owner_1c=?,
+		 	node=?,
+		 	is_cancel=?,
+		 	delivery_amount=?,
+		 	is_rеturned=?,
+		 	return_at=?,
+		 	individual_id=(select id from bi_nomens where code=?),
+		 	delay_amount=?,
+		 	deal_logist_id=(select id from bi_deals where code=?),
+		 	recipe=?,
+		 	ported=?
+
+		 where code=?`;
+		return o.Raw(sql,
+			element["doc_at"],
+			element["account_code"],
+			element["ind_site_code"],
+			element["deal_code"],
+			element["seal"],
+			element["is_central"],
+			element["delivery_address_code"],
+			element["driver_code"],
+			element["apt_account_code"],
+			element["vehicle_code"],
+			element["delivery_type"],
+			element["departure_at"],
+			element["beton_req_code"],
+			element["shipped_quantity"],
+			element["dscr"],
+			element["mod_nomen_code"],
+			element["addon_nomen_code"],
+			element["owner_1c"],
+			element["node"],
+			element["is_cancel"],
+			element["delivery_amount"],
+			element["is_rеturned"],
+			element["return_at"],
+			element["individual_code"],
+			element["delay_amount"],
+			element["deal_logist_code"],
+			element["recipe"],
+			element["ported"],
+			element["code"],
+
+
+		).Exec()
+		/*                ****************       */
+		/*                END   INVOICE DOCUMENT */
 	}else{
 		return nil,errors.New("entity "+entityCode+" not importable")
 	}
@@ -95,6 +165,107 @@ func AdvancedImportCaseInsert(entityCode string, o orm.Ormer , element orm.Param
 		sql := "insert into " + entityCode + " (code,title,lastname,firstname,middlename,position,rolset) values "+
 		"(?,?,?,?,?,?,?)";
 		return o.Raw(sql, element["code"], element["title"], element["lastname"], element["firstname"], element["middlename"], element["position"], element["rolset"]).Exec()
+	}else if 	entityCode == "bi_beton_invoices"  {
+		/*                START BETON INVOICE DOCUMENT */
+		/*                ****************       */
+		sql := "insert into " + entityCode +
+		`
+		(code,
+		doc_at,
+		account_id,
+		ind_site_id,
+		deal_id,
+		seal,
+		is_central,
+		delivery_address_id,
+		driver_id,
+		apt_account_id,
+		vehicle_id,
+		delivery_type,
+		departure_at,
+		beton_req_id,
+		shipped_quantity,
+		dscr,
+		mod_nomen_id,
+		addon_nomen_id,
+		owner_1c,
+		node,
+		is_cancel,
+		delivery_amount,
+		is_rеturned,
+		return_at,
+		individual_id,
+		delay_amount,
+		deal_logist_id,
+		recipe,
+		ported
+		)
+
+values
+		(
+			?,
+			?,
+			(select id from accounts where code=?),
+			(select id from bi_ind_sites where code=?),
+			(select id from bi_deals where code=?),
+			?,
+			?,
+			(select id from bi_addresses where code=?),
+			(select id from bi_drivers where code=?),
+			(select id from accounts where code=?),
+			(select id from bi_vehicles where code=?),
+			?,
+			?,
+			(select id from bi_beton_reqs where code=?),
+			?,
+			?,
+			(select id from bi_nomens where code=?),
+			(select id from bi_nomens where code=?),
+			?,
+			?,
+			?,
+			?,
+			?,
+			?,
+			(select id from bi_nomens where code=?),
+			?,
+			(select id from bi_deals where code=?),
+			?,
+			? )`;
+		return o.Raw(sql,
+			element["code"],
+			element["doc_at"],
+			element["account_code"],
+			element["ind_site_code"],
+			element["deal_code"],
+			element["seal"],
+			element["is_central"],
+			element["delivery_address_code"],
+			element["driver_code"],
+			element["apt_account_code"],
+			element["vehicle_code"],
+			element["delivery_type"],
+			element["departure_at"],
+			element["beton_req_code"],
+			element["shipped_quantity"],
+			element["dscr"],
+			element["mod_nomen_code"],
+			element["addon_nomen_code"],
+			element["owner_1c"],
+			element["node"],
+			element["is_cancel"],
+			element["delivery_amount"],
+			element["is_rеturned"],
+			element["return_at"],
+			element["individual_code"],
+			element["delay_amount"],
+			element["deal_logist_code"],
+			element["recipe"],
+			element["ported"],
+
+		).Exec()
+		/*                ****************       */
+		/*                END BETON INVOICE DOCUMENT */
 	}else{
 		return nil,errors.New("entity "+entityCode+" not importable")
 	}

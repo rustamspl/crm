@@ -1,4 +1,7 @@
 package main
+
+import 	_ "github.com/go-sql-driver/mysql"
+
 import (
 	"log"
 "encoding/xml"
@@ -6,7 +9,26 @@ import (
 	"bytes"
 	"net/http"
 	"io/ioutil"
+
+	"github.com/astaxie/beego/orm"
+	"os"
 )
+
+func init() {
+	err := orm.RegisterDriver("mysql", orm.DRMySQL)
+	if err!=nil{
+		panic(err)
+	}
+
+	err = orm.RegisterDataBase("default", "mysql", os.Getenv("OPENSHIFT_MYSQL_DB_USERNAME")+":"+os.Getenv("OPENSHIFT_MYSQL_DB_PASSWORD")+"@tcp("+os.Getenv("OPENSHIFT_MYSQL_DB_HOST")+":"+os.Getenv("OPENSHIFT_MYSQL_DB_PORT")+")/"+os.Getenv("OPENSHIFT_APP_NAME")+"?charset=utf8")
+	if err!=nil{
+		panic(err)
+	}else{
+		log.Println("ok... openshift_port="+os.Getenv("OPENSHIFT_GO_PORT"))
+	}
+
+}
+
 
 func main(){
 
@@ -47,8 +69,24 @@ func main(){
 	}
 
 	v := &CreateBRequest{}
-	v.Address = "e2f14b8d-cedc-11e5-b841-000c29d408f3"
-	v.ArrivalTime = time.Now()
+
+	o := orm.NewOrm()
+	o.Using("default")
+	//var vals orm.Params
+
+
+//	var vals map[string]string
+//	vals = make(map[string]string)
+
+	//o.Raw("select 'e2f14b8d-cedc-11e5-b841-000c29d408f3' address ").QueryRow(&vals)
+	err := o.Raw("select 'e2f14b8d-cedc-11e5-b841-000c29d408f3' address, Now() ArrivalTime ").QueryRow(&v);
+	log.Println(err)
+	log.Println(v.ArrivalTime)
+	//return
+
+
+	//v.Address = "e2f14b8d-cedc-11e5-b841-000c29d408f3"//vals["address"].(string)
+	//v.ArrivalTime = time.Now()
 	v.Central = 1
 	v.ClientReceive = "e71b65ef-e8ac-11e4-8140-2c41387d88d0"
 	v.Construction = "fe8903bb-257e-11e5-a135-000c29272e31"
