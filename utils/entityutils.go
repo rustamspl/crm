@@ -31,11 +31,11 @@ func CheckTableRegexp(fieldName string) error {
 }
 
 func CheckFieldRegexp(fieldName string) error {
-	var validID = regexp.MustCompile(`^[a-z|0-9|\_]+$`)
+	var validID = regexp.MustCompile(`^[A-Za-z0-9_]+$`)
 
 	var err error = nil
 	if !validID.MatchString(fieldName){
-		err = errors.New("invalid field name "+fieldName)
+		err = errors.New("invalid field name 222 {"+fieldName+"}")
 	} else{
 		err = nil
 	}
