@@ -11,15 +11,6 @@ import (
 
 )
 
-//func CdrTest(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-//	//fmt.Fprint(w, "Welcome!\n")
-//	log.Print("URA GOI! TEMA!!!")
-//
-//	defer r.Body.Close()
-//	ioutil.ReadAll(r.Body)
-//	//log.Println(string(body))
-//
-//}
 
 type CDRQueryGetResponse struct {
 	RowCount   int `json:"rowCount"`
@@ -36,8 +27,6 @@ func Cdr(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	log.Print("URA GOI! 2222 TEMA!!!")
 
 	defer r.Body.Close()
-	//body, _ := ioutil.ReadAll(r.Body)
-	//log.Println(string(body))
 
 	decoder := json.NewDecoder(r.Body)
 	var t CDRQueryGetResponse
@@ -50,9 +39,6 @@ func Cdr(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	for _,value := range t.Items {
 
-		//start_stamp,_ := value["start_stamp"].(string)
-		//log.Println( value["start_stamp"])
-		//log.Println(start_stamp)
 		_,errrr := o.Raw("insert into col_calls "+
 		"(ext_id,local_ip_v4,caller_id_name,caller_id_number,"+
 

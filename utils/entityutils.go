@@ -5,13 +5,41 @@ import (
 	"log"
 
 	"regexp"
+	"errors"
 )
 
 var db = os.Getenv("OPENSHIFT_APP_NAME")
 
-func CheckTableRegexp(entityCode string) bool {
+
+func CheckTableRegexpBool(entityCode string) bool {
 	var validID = regexp.MustCompile(`^[a-z|0-9|\_]+$`)
 	return validID.MatchString(entityCode)
+
+}
+
+func CheckTableRegexp(fieldName string) error {
+	var validID = regexp.MustCompile(`^[a-z|0-9|\_]+$`)
+
+	var err error = nil
+	if !validID.MatchString(fieldName){
+		err = errors.New("invalid field name "+fieldName)
+	} else{
+		err = nil
+	}
+	return err
+
+}
+
+func CheckFieldRegexp(fieldName string) error {
+	var validID = regexp.MustCompile(`^[a-z|0-9|\_]+$`)
+
+	var err error = nil
+	if !validID.MatchString(fieldName){
+		err = errors.New("invalid field name "+fieldName)
+	} else{
+		err = nil
+	}
+	return err
 
 }
 

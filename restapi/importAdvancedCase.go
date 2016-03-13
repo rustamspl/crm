@@ -17,10 +17,10 @@ func AdvancedImportCaseUpdate(entityCode string, o orm.Ormer , element orm.Param
 				entityCode == "bi_ind_sites"  {
 		sql := "update " + entityCode + " set title=? where code=?";
 		return o.Raw(sql, element["title"],element["code"]).Exec()
-	}else if 	entityCode == "bi_addresses"  {
+	}else if 	entityCode == "bi_nomens"  {
 		sql := "update " + entityCode + " set title=?,article=?,model=?,frost=?,water=?,mobility=?,unit=? where code=?";
 		return o.Raw(sql, element["title"], element["article"], element["model"],element["frost"],element["water"],element["mobility"],element["unit"],element["code"]).Exec()
-	}else if 	entityCode == "bi_nomens"  {
+	}else if 	entityCode == "bi_addresses"  {
 		sql := "update " + entityCode + " set title=?,lat=?,lon=? where code=?";
 		return o.Raw(sql, element["title"], element["lat"], element["lon"],element["code"]).Exec()
 	}else if 	entityCode == "bi_drivers"  {

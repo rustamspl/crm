@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"github.com/astaxie/beego/orm"
 	"strings"
-	"regexp"
 	"log"
 	"fmt"
 	"github.com/yeldars/crm/auth"
 	"strconv"
+	"github.com/yeldars/crm/utils"
 )
 
 type UpdateRequest_v_1_1_Item struct {
@@ -46,8 +46,8 @@ func UpdateRestApi_v_1_1(res http.ResponseWriter, req *http.Request, _ httproute
 	var t UpdateRequest_v_1_1
 	var resP UpdateResponse_v_1_1
 	err := decoder.Decode(&t)
-	if err != nil {
-		panic(err)
+	if RestCheckPanic(err ,res) {
+		return
 	}
 	o := orm.NewOrm()
 	o.Using("default")
@@ -64,7 +64,10 @@ func UpdateRestApi_v_1_1(res http.ResponseWriter, req *http.Request, _ httproute
 
 			for fieldName,fieldValue := range value {
 
-				fieldName=regexp.QuoteMeta(fieldName)
+				err:= utils.CheckFieldRegexp(fieldName) //Check SQL Injection
+				if RestCheckDBPanic(err ,res ,o ) {
+					return
+				}
 
 				if !strings.HasPrefix(fieldName,"_") {
 					if fieldValue==nil{
@@ -92,13 +95,13 @@ func UpdateRestApi_v_1_1(res http.ResponseWriter, req *http.Request, _ httproute
 			//log.Println("id ="+ element["id"].(string) )
 			if t.Items[items].Action =="insert" {
 				sql := "insert into " + t.Items[items].TableName + " ( " + insertColumns + " ) values ( "+ insertValues +")"
-				log.Println("insert sql="+sql)
+				//log.Println("insert sql="+sql)
 				i, err := o.Raw(sql, arr).Exec()
 				if RestCheckDBPanic(err ,res ,o ) {
 					return
 				}
 				lastInsertId,err = i.LastInsertId()
-				log.Println("sql="+sql)
+				//log.Println("sql="+sql)
 				if RestCheckDBPanic(err ,res ,o ) {
 					return
 				}
@@ -137,7 +140,12 @@ func UpdateRestApi_v_1_1(res http.ResponseWriter, req *http.Request, _ httproute
 			iid,_ := id.LastInsertId()
 
 			for fieldName,fieldValue := range value {
-				fieldName = regexp.QuoteMeta(fieldName)
+
+				err:= utils.CheckFieldRegexp(fieldName) //Check SQL Injection
+				if RestCheckDBPanic(err ,res ,o ) {
+					return
+				}
+
 				if !strings.HasPrefix(fieldName, "_") {
 					if fieldValue == nil {
 						_, err := o.Raw("insert into table_log_dtls (col,val,log_id) values (?,NULL,?)", fieldName, iid).Exec()

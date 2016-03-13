@@ -9,6 +9,7 @@ import (
 	"log"
 	"fmt"
 	"strconv"
+"github.com/yeldars/crm/utils"
 )
 
 type UpdateRequest struct {
@@ -44,7 +45,10 @@ func UpdateRestApi(res http.ResponseWriter, req *http.Request, _ httprouter.Para
 
 		for fieldName,fieldValue := range element {
 
-			fieldName=regexp.QuoteMeta(fieldName)
+			err:= utils.CheckFieldRegexp(fieldName) //Check SQL Injection
+			if RestCheckDBPanic(err ,res ,o ) {
+				return
+			}
 
 			if fieldName=="_table_name_"{
 				t.TableName=regexp.QuoteMeta(fieldValue.(string))

@@ -68,7 +68,7 @@ func ImportAdvancedReferenceRestApi(res http.ResponseWriter, req *http.Request, 
 		entity := element["entity"].(string)
 			if entityPriors[entity]==i {
 				log.Println("@@@@@@@@@@@@ process "+entity)
-				if utils.CheckTableRegexp(entity) {
+				if utils.CheckTableRegexpBool(entity) {
 					sqlCnt := "select count(1) cnt from " + entity + " where code=?";
 					cnt := 0
 					err := o.Raw(sqlCnt, element["code"]).QueryRow(&cnt)

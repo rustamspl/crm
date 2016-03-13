@@ -50,6 +50,7 @@ func HandleInit(){
 
 	router.POST("/restapi/login",restapi.Login)
 	router.GET("/userpic",file.UserPic)
+	router.GET("/getfile",file.GetFile)
 	router.POST("/auth/login",auth.Login)
 	router.GET("/auth/session_info",auth.GetSessionInfo)
 	router.POST("/auth/resetpassword",auth.ResetPassword)
