@@ -79,16 +79,37 @@ func main(){
 //	vals = make(map[string]string)
 
 	//o.Raw("select 'e2f14b8d-cedc-11e5-b841-000c29d408f3' address ").QueryRow(&vals)
-	err := o.Raw("select 'e2f14b8d-cedc-11e5-b841-000c29d408f3' address, Now() ArrivalTime ").QueryRow(&v);
-	log.Println(err)
+	err := o.Raw(`
+	select (select a.code from bi_addresses a where a.id=r.address_id) address,
+			Now() arrival_time,
+			r.is_central central,
+			(select a.code from accounts a where a.id=r.consignee_id) client_receive,
+			(select c.code from bi_constructions c where c.id=r.construction_id) construction,
+			(select c.code from contacts c where c.id=r.contact_id) contacts,
+			(select a.code from accounts a where a.id=r.account_id) contragent,
+			created_at date,
+			(select b.code from bi_deals b where b.id=r.deal_id) deal
+			from bi_beton_reqs r where r.id=1`).QueryRow(&v);
+	if err!=nil{
+		panic(err)
+	}
+	log.Println(v.Address)
 	log.Println(v.ArrivalTime)
-	//return
+	log.Println(v.Central)
+	log.Println(v.ClientReceive)
+	log.Println(v.Construction)
+	log.Println(v.Contacts)
+	log.Println(v.Contragent)
+	log.Println(v.Date)
+	log.Println(v.Deal)
+
+	return
 
 
 	//v.Address = "e2f14b8d-cedc-11e5-b841-000c29d408f3"//vals["address"].(string)
 	//v.ArrivalTime = time.Now()
-	v.Central = 1
-	v.ClientReceive = "e71b65ef-e8ac-11e4-8140-2c41387d88d0"
+	//v.Central = 1
+	//v.ClientReceive = "e71b65ef-e8ac-11e4-8140-2c41387d88d0"
 	v.Construction = "fe8903bb-257e-11e5-a135-000c29272e31"
 	v.Contacts = "54abb0ae-e8e7-11e5-a682-000c29c99fbb"
 	v.Contragent = "347cf5da-2e61-11e4-b550-2c41387d88d0"
