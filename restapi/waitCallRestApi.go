@@ -14,6 +14,8 @@ import (
 
 func WaitCallRestApiGet(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 
+	res.Header().Set("Access-Control-Allow-Origin", "*")
+
 	o := orm.NewOrm()
 	o.Using("default")
 	like := ""

@@ -8,16 +8,18 @@ import (
 "encoding/json"
 	"fmt"
 	"github.com/yeldars/crm/utils"
+	"log"
 )
 
 
 func Login(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
 
+
 	type LoginRequest struct {
 		Login string "json:`login`"
 		Password string "json:`password`"
 		System string "json:`system`"
-		DeviceToken string "json:`device_token`"
+		DeviceToken string "json:`deviceToken`"
 	}
 	type LoginResponse struct {
 		Result string "json:`result`"
@@ -26,7 +28,7 @@ func Login(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
 	const loginIncorrect  = "incorrect"
 	const loginOk  = "ok"
 	const loginLocked  = "locked"
-	const loginUnknownError  = "locked"
+	const loginUnknownError  = "unknownError"
 
 
 	decoder := json.NewDecoder(req.Body)
@@ -36,7 +38,7 @@ func Login(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
 		panic(err)
 	}
 	var result LoginResponse
-	result.Result = loginUnknownError
+	result.Result = loginUnknownError+"XXX"
 	req.ParseForm();
 	auth.DoLoginLog(auth.UserId(req),1)
 	o := orm.NewOrm()
@@ -55,22 +57,22 @@ func Login(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
 	}
 
 
+	log.Println("request.DeviceToken"+ request.DeviceToken)
+	log.Println("request.System"+ request.System)
 	if err!=nil{
 		result.Result = loginIncorrect
 	}	else {
-		_,err = o.Raw("update users set device_token=? where id=?",request.DeviceToken,user_id).Exec()
-		if err!=nil{
-			result.Result = loginUnknownError
-		}else {
-			session.Values["user_id"] = user_id
-			session.Values["system"] = request.System
-			session.Save(req, res)
-			result.Result = loginOk
-			result.RedirectURL = utils.GetDomainParamValue(req.Host, "homepage")
+		if request.DeviceToken!="" {
+			_, err = o.Raw("update users set device_token=? where id=?", request.DeviceToken, user_id).Exec()
 		}
 
-
+		result.Result = loginOk
+		session.Values["user_id"] = user_id
+		session.Values["system"] = request.System
+		session.Save(req, res)
+		result.RedirectURL = utils.GetDomainParamValue(req.Host, "homepage")
 	}
+
 
 
 	jsonData, _ := json.Marshal(result)

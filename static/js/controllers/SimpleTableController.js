@@ -1,5 +1,5 @@
 'use strict';
-MetronicApp.controller('SimpleTableController', function($rootScope, $scope, $http, $timeout,DMLService,$filter,$location) {
+MetronicApp.controller('SimpleTableController', function($rootScope, $scope, $http, $timeout,DMLService,$filter,$location,RestApiService) {
 
 
 
@@ -105,7 +105,9 @@ MetronicApp.controller('SimpleTableController', function($rootScope, $scope, $ht
 
 
 
-        $http.get('../restapi/query/get?code='+$scope.table_name+'&page='+$scope.currentPage+'&perpage='+$scope.perPage+"&"+$scope.searchURL).
+        //var hostName = "http://dev.beton.bapps.kz:9999";
+
+        RestApiService.get('query/get?code='+$scope.table_name+'&page='+$scope.currentPage+'&perpage='+$scope.perPage+"&"+$scope.searchURL).
         success(function(data) {
             $scope.rowCollection = data.items;
             $scope.pageCount = data.pageCount;

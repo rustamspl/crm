@@ -236,7 +236,7 @@ MetronicApp.run(['$rootScope', '$translate', '$log','tmhDynamicLocale', function
 
 
 ///* Init global settings and run the app */
-MetronicApp.run(['$urlRouter',"$rootScope", '$http',"settings", "$state","cssInjector", "$timeout", function($urlRouter,$rootScope, $http, settings, $state,cssInjector,$timeout) {
+MetronicApp.run(['$urlRouter',"$rootScope", '$http',"settings", "$state","cssInjector", "$timeout", "RestApiService", function($urlRouter,$rootScope, $http, settings, $state,cssInjector,$timeout,RestApiService) {
 
 
 
@@ -259,8 +259,8 @@ MetronicApp.run(['$urlRouter',"$rootScope", '$http',"settings", "$state","cssInj
     }
     $rootScope.waitcall = function(){
             $timeout(function() {
-                $http
-                    .get("../restapi/waitcall")
+                RestApiService
+                    .get("waitcall")
                     .success(function(data) {
 
                         //$rootScope.waitCall = {};
@@ -292,8 +292,8 @@ MetronicApp.run(['$urlRouter',"$rootScope", '$http',"settings", "$state","cssInj
         //var $state = $rootScope.$state;
 
 
-    $http
-        .get("../restapi/query/get?code=sessioninfo")
+    RestApiService
+        .get("query/get?code=sessioninfo")
         .success(function(data) {
 
             //alert(data.items);
@@ -304,15 +304,15 @@ MetronicApp.run(['$urlRouter',"$rootScope", '$http',"settings", "$state","cssInj
             }
             $rootScope.sessioninfo=data.items[0];
             $rootScope.isMobile = data.isMobile;
-            cssInjector.add($rootScope.sessioninfo.company_css);
+            //cssInjector.add($rootScope.sessioninfo.company_css);
             <!--<link href="theme/assets/admin/layout/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>-->
 
 
 
         });
 
-    $http
-        .get("../restapi/query/get?code=session_parameters")
+    RestApiService
+        .get("query/get?code=session_parameters")
         .success(function(data) {
 
             $rootScope.session_parameters=[];
@@ -328,8 +328,8 @@ MetronicApp.run(['$urlRouter',"$rootScope", '$http',"settings", "$state","cssInj
         });
 
 
-    $http
-        .get("../restapi/query/get?code=session_roles")
+    RestApiService
+        .get("query/get?code=session_roles")
         .success(function(data) {
 
             $rootScope.session_roles=[];
@@ -344,8 +344,8 @@ MetronicApp.run(['$urlRouter',"$rootScope", '$http',"settings", "$state","cssInj
         });
 
 
-    $http
-            .get("../restapi/pages/get")
+    RestApiService
+            .get("pages/get")
             .success(function(data) {
                 angular.forEach(data, function(value, key) {
 
@@ -417,7 +417,6 @@ MetronicApp.run(['$urlRouter',"$rootScope", '$http',"settings", "$state","cssInj
             });
     }
 ]);
-
 
 
 

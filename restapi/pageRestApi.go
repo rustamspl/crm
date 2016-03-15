@@ -35,6 +35,8 @@ type State struct {
 
 
 func PageRestApiGet(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
+	res.Header().Set("Access-Control-Allow-Origin", "*")
+
 	if RestCheckAuth(res,req){
 		return
 	}

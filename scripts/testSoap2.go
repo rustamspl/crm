@@ -12,6 +12,7 @@ import (
 
 	"github.com/astaxie/beego/orm"
 	"os"
+	"strings"
 )
 
 func init() {
@@ -79,6 +80,7 @@ func main(){
 //	vals = make(map[string]string)
 
 	//o.Raw("select 'e2f14b8d-cedc-11e5-b841-000c29d408f3' address ").QueryRow(&vals)
+	reqId := 1
 	err := o.Raw(`
 	select (select a.code from bi_addresses a where a.id=r.address_id) address,
 			Now() arrival_time,
@@ -98,9 +100,24 @@ func main(){
 			(select b.code from bi_mobilities b where b.id=r.mobility_id) osadka_konusa,
 			r.period,
 			1 plan_on,
+			1 priority,
+			r.quantity,
+			1 req_spec_vehicles,
+			(select b.title from bi_beton_req_statuses b where b.id=r.status_id) request_status,
+			'' responsible,
+			now() ShippingPickup,
+			1 spec_vehicles,
+			now() time_apply,
+			7.7 v_hodke,
+			(select v.code from bi_vehicle_vids v limit 1) vehicles_type,
+			r.title comment
 
 
-			from bi_beton_reqs r where r.id=1`).QueryRow(&v);
+
+
+
+
+			from bi_beton_reqs r where r.id=?`,reqId).QueryRow(&v);
 	if err!=nil{
 		panic(err)
 	}
@@ -121,8 +138,20 @@ func main(){
 	log.Println(v.OnCall)
 	log.Println(v.OsadkaKonusa)
 	log.Println(v.Period)
+	log.Println(v.PlanOn)
+	log.Println(v.Priority)
+	log.Println(v.Quantity)
+	log.Println(v.ReqSpecVehicles)
+	log.Println(v.RequestStatus)
+	log.Println(v.Responsible)
+	log.Println(v.ShippingPickup)
+	log.Println(v.SpecVehicles)
+	log.Println(v.TimeApply)
+	log.Println(v.VHodke)
+	log.Println(v.VehiclesType)
+	log.Println(v.Comment)
 
-	return
+	//return
 
 
 	//v.Address = "e2f14b8d-cedc-11e5-b841-000c29d408f3"//vals["address"].(string)
@@ -143,19 +172,19 @@ func main(){
 	//v.OnCall = 1
 	//v.OsadkaKonusa = "aea0a7cb-4a2c-11e5-ba04-000c29272e31"
 
-	v.Period = time.Now()
-	v.PlanOn = 1
-	v.Priority = 1
-	v.Quantity = 20
-	v.ReqSpecVehicles = 1
-	v.RequestStatus = "Создан"
-	v.Responsible = ""
-	v.ShippingPickup = time.Now()
-	v.SpecVehicles = 1
-	v.TimeApply = time.Now()
-	v.VHodke = 5.5
-	v.VehiclesType = "d78d320e-05f2-11e5-b7fe-001f5b7cd426"
-	v.Comment = "Hello from Beton CRM"
+	//v.Period = time.Now()
+	//v.PlanOn = 1
+	//v.Priority = 1
+	//v.Quantity = 20
+	//v.ReqSpecVehicles = 1
+	//v.RequestStatus = "Создан"
+	//v.Responsible = ""
+	//v.ShippingPickup = time.Now()
+	//v.SpecVehicles = 1
+	//v.TimeApply = time.Now()
+	//v.VHodke = 5.5
+	//v.VehiclesType = "d78d320e-05f2-11e5-b7fe-001f5b7cd426"
+	//v.Comment = "Hello from Beton CRM"
 
 
 
@@ -179,5 +208,33 @@ buf := bytes.NewBufferString(
 	}
 	response, _ := ioutil.ReadAll(resp.Body)
 	log.Println(string(response))
+
+	respTxt  := string(response)
+
+	respTxt   = strings.Replace(respTxt,"m:","",-1)
+	respTxt   = strings.Replace(respTxt,"soap:","",-1)
+
+
+
+	log.Println(respTxt)
+
+	type Result struct {
+		XMLName xml.Name `xml:"Envelope"`
+		Return string `xml:"Body>createResponse>return"`
+
+		}
+	var respStr Result
+
+	err = xml.Unmarshal([]byte(respTxt), &respStr)
+	log.Println(respStr)
+	arrRes := strings.Split(respStr.Return,"|")
+	log.Println(arrRes[0])
+	log.Println(arrRes[1])
+
+	_,err = o.Raw("update bi_beton_reqs set num=?,code=? where id=?",arrRes[0],arrRes[1],reqId).Exec()
+	if err!=nil{
+		panic(err)
+	}
+
 
 }

@@ -82,11 +82,17 @@ func HandleInit(){
 	router.POST("/restapi/invoiceRestApi",restapi.InvoiceCreateRestApi)
 	router.POST("/restapi/importStandartReference/",restapi.ImportStandartReferenceRestApi)
 	router.POST("/restapi/importAdvancedReference/",restapi.ImportAdvancedReferenceRestApi)
+	router.POST("/restapi/doEntityAction/",restapi.DoEntityAction)
+
+
 
 
 
 
 	bind := fmt.Sprintf("%s:%s", os.Getenv("OPENSHIFT_GO_IP"), os.Getenv("OPENSHIFT_GO_PORT"))
+
+
+
 	//err := http.ListenAndServe(bind, nil)
 	log.Fatal(http.ListenAndServe(bind, router))
 
