@@ -17,6 +17,7 @@ func Login(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
 		Login string "json:`login`"
 		Password string "json:`password`"
 		System string "json:`system`"
+		DeviceToken string "json:`device_token`"
 	}
 	type LoginResponse struct {
 		Result string "json:`result`"
@@ -57,11 +58,18 @@ func Login(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
 	if err!=nil{
 		result.Result = loginIncorrect
 	}	else {
-		session.Values["user_id"] = user_id
-		session.Values["system"] = request.System
-		session.Save(req, res)
-		result.Result = loginOk
-		result.RedirectURL = utils.GetDomainParamValue(req.Host,"homepage")
+		_,err = o.Raw("update users set device_token=? where id=?",request.DeviceToken,user_id).Exec()
+		if err!=nil{
+			result.Result = loginUnknownError
+		}else {
+			session.Values["user_id"] = user_id
+			session.Values["system"] = request.System
+			session.Save(req, res)
+			result.Result = loginOk
+			result.RedirectURL = utils.GetDomainParamValue(req.Host, "homepage")
+		}
+
+
 	}
 
 

@@ -88,7 +88,18 @@ func main(){
 			(select c.code from contacts c where c.id=r.contact_id) contacts,
 			(select a.code from accounts a where a.id=r.account_id) contragent,
 			created_at date,
-			(select b.code from bi_deals b where b.id=r.deal_id) deal
+			(select b.code from bi_deals b where b.id=r.deal_id) deal,
+			Now() frequency_of_deliveries,
+			(select b.code from bi_individuals b where b.id=r.contact_object_id) individuals,
+			(select b.code from bi_nomens b where b.id=r.nomen_id) item,
+			13 keb_request_number,
+			(select b.code from bi_mobilities b where b.id=r.mobility_id) mobility,
+			r.by_call on_call,
+			(select b.code from bi_mobilities b where b.id=r.mobility_id) osadka_konusa,
+			r.period,
+			1 plan_on,
+
+
 			from bi_beton_reqs r where r.id=1`).QueryRow(&v);
 	if err!=nil{
 		panic(err)
@@ -102,6 +113,14 @@ func main(){
 	log.Println(v.Contragent)
 	log.Println(v.Date)
 	log.Println(v.Deal)
+	log.Println(v.FrequencyOfDeliveries)
+	log.Println(v.Individuals)
+	log.Println(v.Item)
+	log.Println(v.KebRequestNumber)
+	log.Println(v.Mobility)
+	log.Println(v.OnCall)
+	log.Println(v.OsadkaKonusa)
+	log.Println(v.Period)
 
 	return
 
@@ -110,19 +129,20 @@ func main(){
 	//v.ArrivalTime = time.Now()
 	//v.Central = 1
 	//v.ClientReceive = "e71b65ef-e8ac-11e4-8140-2c41387d88d0"
-	v.Construction = "fe8903bb-257e-11e5-a135-000c29272e31"
-	v.Contacts = "54abb0ae-e8e7-11e5-a682-000c29c99fbb"
-	v.Contragent = "347cf5da-2e61-11e4-b550-2c41387d88d0"
-	v.Date = time.Now()
-	v.Deal = "0bf4aff5-ef28-11e4-8140-2c41387d88d0"
-	v.DeliveryType = ""
-	v.FrequencyOfDeliveries = time.Now()
-	v.Individuals = "e486c728-e87e-11e5-a682-000c29c99fbb"
-	v.Item = "e519d46d-843c-11e5-b4fd-000c29d0ccb0"
-	v.KebRequestNumber = "13"
-	v.Mobility = "8cb516af-6577-4528-9cdf-bf6a630300d5"
-	v.OnCall = 1
-	v.OsadkaKonusa = "aea0a7cb-4a2c-11e5-ba04-000c29272e31"
+	//v.Construction = "fe8903bb-257e-11e5-a135-000c29272e31"
+	//v.Contacts = "54abb0ae-e8e7-11e5-a682-000c29c99fbb"
+	//v.Contragent = "347cf5da-2e61-11e4-b550-2c41387d88d0"
+	//v.Date = time.Now()
+	//v.Deal = "0bf4aff5-ef28-11e4-8140-2c41387d88d0"
+	//v.DeliveryType = ""
+	//v.FrequencyOfDeliveries = time.Now()
+	//v.Individuals = "e486c728-e87e-11e5-a682-000c29c99fbb"
+	//v.Item = "e519d46d-843c-11e5-b4fd-000c29d0ccb0"
+	//v.KebRequestNumber = "13"
+	//v.Mobility = "8cb516af-6577-4528-9cdf-bf6a630300d5"
+	//v.OnCall = 1
+	//v.OsadkaKonusa = "aea0a7cb-4a2c-11e5-ba04-000c29272e31"
+
 	v.Period = time.Now()
 	v.PlanOn = 1
 	v.Priority = 1
