@@ -94,7 +94,7 @@ License: You must have a valid license purchased only from themeforest(the above
 			<div class="page-content">
 				<!-- BEGIN STYLE CUSTOMIZER(optional) -->
 
-				<div data-ng-include="'tpl/theme-panel.html'" data-ng-controller="ThemePanelController" class="theme-panel hidden-xs hidden-sm">
+				<div ng-if="session_parameters.show_theme_panel==1"  data-ng-include="'tpl/theme-panel.html'" data-ng-controller="ThemePanelController" class="theme-panel hidden-xs hidden-sm">
 				</div>
 
 				<!-- END STYLE CUSTOMIZER -->

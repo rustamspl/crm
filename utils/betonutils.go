@@ -111,21 +111,16 @@ func BetonReqSendTo1C(reqId string) error {
 	}
 	response, _ := ioutil.ReadAll(resp.Body)
 	log.Println(string(response))
-
 	respTxt := string(response)
-
 	respTxt = strings.Replace(respTxt, "m:", "", -1)
 	respTxt = strings.Replace(respTxt, "soap:", "", -1)
-
-
-
 	log.Println(respTxt)
 
 	type Result struct {
 		XMLName xml.Name `xml:"Envelope"`
 		Return  string `xml:"Body>createResponse>return"`
-
 	}
+
 	var respStr Result
 
 	err = xml.Unmarshal([]byte(respTxt), &respStr)
