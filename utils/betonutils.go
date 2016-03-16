@@ -49,7 +49,7 @@ func BetonReqSendTo1C(reqId string) error {
 		ShippingPickup        time.Time `xml:"crm:shipping_pickup"`
 		SpecVehicles          int `xml:"crm:spec_vehicles"`
 		TimeApply             time.Time `xml:"crm:time_apply"`
-		VHodke                float64 `xml:"crm:v_hodke"`
+		VHodke                string `xml:"crm:v_hodke"`
 		VehiclesType          string `xml:"crm:vehicles_type"`
 		Comment               string `xml:"crm:comment"`
 	}
@@ -83,7 +83,7 @@ func BetonReqSendTo1C(reqId string) error {
 			now() ShippingPickup,
 			1 spec_vehicles,
 			now() time_apply,
-			7.7 v_hodke,
+			r.v_hodke,
 			(select v.code from bi_vehicle_vids v limit 1) vehicles_type,
 			r.title comment
 			from bi_beton_reqs r where r.id=?`, reqId).QueryRow(&v);
