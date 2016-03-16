@@ -5,5 +5,9 @@
   height: 27px;
   width: 50px;
 
+}
 
+.page-loading {
+
+  z-index: 9999 !important;
 }
