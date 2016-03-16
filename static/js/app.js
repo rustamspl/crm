@@ -304,7 +304,7 @@ MetronicApp.run(['$urlRouter',"$rootScope", '$http',"settings", "$state","cssInj
             }
             $rootScope.sessioninfo=data.items[0];
             $rootScope.isMobile = data.isMobile;
-            //cssInjector.add($rootScope.sessioninfo.company_css);
+            cssInjector.add($rootScope.sessioninfo.company_css);
             <!--<link href="theme/assets/admin/layout/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>-->
 
 

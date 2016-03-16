@@ -12,13 +12,13 @@ import (
 "strings"
 )
 
-func BetonCancelSend(reqId int) error {
+func BetonCancelSend(reqId string) error {
 	o := orm.NewOrm()
 	o.Using("default")
 	_, err := o.Raw("update bi_beton_reqs set status_id=1 where id=?", reqId).Exec()
 	return err
 }
-func BetonReqSendTo1C(reqId int) error {
+func BetonReqSendTo1C(reqId string) error {
 
 	type CreateBRequest struct {
 		XMLName               xml.Name `xml:"crm:create"`

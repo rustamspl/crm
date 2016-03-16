@@ -107,8 +107,10 @@ MetronicApp.controller('SimpleTableController', function($rootScope, $scope, $ht
 
         //var hostName = "http://dev.beton.bapps.kz:9999";
 
+        Metronic.startPageLoading();
         RestApiService.get('query/get?code='+$scope.table_name+'&page='+$scope.currentPage+'&perpage='+$scope.perPage+"&"+$scope.searchURL).
         success(function(data) {
+            Metronic.stopPageLoading();
             $scope.rowCollection = data.items;
             $scope.pageCount = data.pageCount;
             if (data.error==2){

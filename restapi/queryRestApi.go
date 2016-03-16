@@ -14,6 +14,7 @@ import (
 type queryGetResponse struct {
 	IsMobile bool `json:"isMobile"`
 	PageCount   int `json:"pageCount"`
+	Title string `json:"title"`
 	Error      string `json:"error"`
 	Items [] orm.Params`json:"items"`
 }
@@ -53,7 +54,8 @@ func QueryRestApiGet(res http.ResponseWriter, req *http.Request, _ httprouter.Pa
 	pageCount := 0
 
 	sql := ""
-	o.Raw("select sql_text from queries where code=?",code).QueryRow(&sql)
+	title := ""
+	o.Raw("select sql_text,title from queries where code=?",code).QueryRow(&sql,&title)
 	//log.Println("sql="+sql)
 	sql = strings.Replace(sql,":user_id",strconv.Itoa(int(auth.UserId(req))),-1)
 
@@ -108,6 +110,7 @@ func QueryRestApiGet(res http.ResponseWriter, req *http.Request, _ httprouter.Pa
 
 	respO.Items = arr
 	respO.Error = "0"
+	respO.Title = title
 	respO.PageCount = pageCount
 	jsonData, err := json.Marshal(respO)
 
