@@ -238,11 +238,8 @@ MetronicApp.run(['$rootScope', '$translate', '$log','tmhDynamicLocale', function
 ///* Init global settings and run the app */
 MetronicApp.run(['$urlRouter',"$rootScope", '$http',"settings", "$state","cssInjector", "$timeout", "RestApiService", function($urlRouter,$rootScope, $http, settings, $state,cssInjector,$timeout,RestApiService) {
 
-
-
-
-
     //Open ACcount
+
 
     $rootScope.navigator = navigator;
 

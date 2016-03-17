@@ -1,24 +1,11 @@
 'use strict';
-MetronicApp.controller('SimpleTableController', function($rootScope, $scope, $http, $timeout,DMLService,$filter,$location,RestApiService) {
+MetronicApp.controller('SimpleTableController', function($rootScope, $scope, $http, $timeout,UIService, DMLService,$filter,$location,RestApiService) {
 
 
 
 
-    $scope.editPage = function(){
-        $http.get('../restapi/query/get?code=pageByCode&param1='+$scope.pageCode).
-        success(function(data) {
-            console.log(data);
-            location.href="#/settings/pagedetails/"+data.items[0].id;
-        });
-    }
+    UIService.bindUITools($scope);
 
-    $scope.editQuery = function(){
-        $http.get('../restapi/query/get?code=queryByCode&param1='+$scope.table_name).
-        success(function(data) {
-            console.log(data);
-            location.href="#/settings/querydetails/"+data.items[0].id;
-        });
-    }
 
 
     $scope.getQueryParams = function (qs) {

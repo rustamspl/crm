@@ -1,9 +1,9 @@
 <li ng-if="((session_roles.admin) && (pageCode))">
-    <a ng-click="editPage()">
+    <a ng-click="editPage(pageCode)">
         <i class="fa fa-check-square-o"></i> <translate>Edit Page</translate> </a>
 </li>
 <li ng-if="((session_roles.admin) && (table_name))">
-    <a ng-click="editQuery()">
+    <a ng-click="editQuery(table_name)">
         <i class="fa fa-check-square-o"></i> <translate>Edit Query</translate> </a>
 </li>
 <li ng-if="!getSelectRecordState()">
