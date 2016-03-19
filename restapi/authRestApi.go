@@ -19,6 +19,7 @@ func Login(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
 		Login string "json:`login`"
 		Password string "json:`password`"
 		System string "json:`system`"
+		Uri string "json:`uri`"
 		DeviceToken string "json:`deviceToken`"
 	}
 	type LoginResponse struct {
@@ -69,6 +70,7 @@ func Login(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
 		result.Result = loginOk
 		session.Values["user_id"] = user_id
 		session.Values["system"] = request.System
+		session.Values["uri"] = request.Uri
 		session.Save(req, res)
 		result.RedirectURL = utils.GetDomainParamValue(req.Host, "homepage")
 	}

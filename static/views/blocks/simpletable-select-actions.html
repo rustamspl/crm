@@ -1,10 +1,10 @@
 <li ng-if="((session_roles.admin) && (pageCode))">
     <a ng-click="editPage(pageCode)">
-        <i class="fa fa-check-square-o"></i> <translate>Edit Page</translate> </a>
+        <i class="fa fa-pencil-square"></i> <translate>Edit Page</translate> </a>
 </li>
 <li ng-if="((session_roles.admin) && (table_name))">
     <a ng-click="editQuery(table_name)">
-        <i class="fa fa-check-square-o"></i> <translate>Edit Query</translate> </a>
+        <i class="fa fa-cube"></i> <translate>Edit Query</translate> </a>
 </li>
 <li ng-if="!getSelectRecordState()">
     <a ng-click="selectRecords()">
@@ -27,6 +27,6 @@
 </li>
 
 <li>
-    <a ng-click="removeAll(table_name)">
+    <a  ng-if="session_parameters.deleteall_enabled==1" ng-click="removeAll(table_name)">
         <i class="fa fa-recycle"></i> <translate>Delete all records</translate> </a>
 </li>
