@@ -133,7 +133,7 @@ func DealRunOper (t * DealOpRun){
 func DealRestApiRunOp(res http.ResponseWriter, req *http.Request, _ httprouter.Params){
 
 	if RestCheckAuth(res,req){
-		return
+	return
 	}
 	decoder := json.NewDecoder(req.Body)
 	var t DealOpRun

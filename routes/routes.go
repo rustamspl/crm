@@ -84,10 +84,7 @@ func HandleInit(){
 	router.POST("/restapi/importAdvancedReference/",restapi.ImportAdvancedReferenceRestApi)
 	router.POST("/restapi/doEntityAction/",restapi.DoEntityAction)
 
-
-
-
-
+	router.POST("/restapi/BPMCreateInstance/",restapi.BPMCreateInstance)
 
 	bind := fmt.Sprintf("%s:%s", os.Getenv("OPENSHIFT_GO_IP"), os.Getenv("OPENSHIFT_GO_PORT"))
 
