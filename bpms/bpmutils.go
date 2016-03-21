@@ -31,20 +31,21 @@ func RunTask(instanceId int64 ) (int64, bool, error) {
 
 
 
-func findFirstTask(instanceId int64) (int64,error) {
+func findFirstPoint(instanceId int64) (int64,error) {
 	o := orm.NewOrm()
 	o.Using("default")
-	taskId := int64(0)
+	pointId := int64(0)
 
-	err := o.Raw(`select ts.task_id from bp_task_sfs ts where  ts.is_incoming=1 and
-	ts.sf_id=(select e.sf_id from bp_events e  where e.process_id=(select process_id from bp_instances where id=?) and
-	e.event_type_id=(select id from bp_event_types et where et.code='start'))`,instanceId).QueryRow(&taskId)
+	err := o.Raw(`select id from bp_points
+			where process_id=(select process_id from bp_instances where id=?)
+			 and type_id=(select id from bp_point_types where code='startevent')
+			 `,instanceId).QueryRow(&pointId)
 	if err!=nil{
-		log.Println("findFirstTask. No next task found "+err.Error())
-		return taskId,err
+		log.Println("findFirstPoint. No next task found "+err.Error())
+		return pointId,err
 	}else{
-		_,err := o.Raw("insert into bp_instance_tasks (instance_id,task_id) values (?,?)",instanceId,taskId).Exec()
-		return taskId,err
+		_,err := o.Raw("insert into bp_instance_points (instance_id,point_id,is_finished) values (?,?,0)",instanceId,pointId).Exec()
+		return pointId,err
 	}
 
 
@@ -63,15 +64,15 @@ func InitRun(instanceId int64 ) (int64, bool, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 
-	taskId, err := findFirstTask(instanceId)
+	pointId, err := findFirstPoint(instanceId)
 	if err!=nil{
-		err := terminateInstance(instanceId)
-		if err!=nil{
+		err2 := terminateInstance(instanceId)
+		if err2!=nil{
 			log.Println("InitRun. Error on terminate task "+err.Error())
-			return taskId, false, err
+			return pointId, false, err2
 		}
-		return taskId, true, err
+		return pointId, true, err
 	}else {
-		return taskId, false, err
+		return pointId, false, err
 	}
 }

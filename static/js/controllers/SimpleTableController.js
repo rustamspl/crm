@@ -123,6 +123,9 @@ MetronicApp.controller('SimpleTableController', function($rootScope, $scope, $ht
         });
         $http.post('../restapi/update_v_1_1', {items: [ {table_name:$scope.table_name, action:"delete",values:deleteValues}    ]}).
         success(function (data) {
+            if (data.error_text){
+                alert(data.error_text);
+            }
             $scope.bind();
         });
     }

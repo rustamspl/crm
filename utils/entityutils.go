@@ -57,6 +57,61 @@ func CheckEntity(entityCode interface{}) bool{
 		fmt.Println(validID.MatchString("1sal/em"))
 	}*/
 }
+
+
+
+
+
+func doCreateFKIndexes(entityCode string)(error){
+
+	sql :=
+	`select concat (
+'ALTER TABLE ',
+e.code ,
+' ADD CONSTRAINT ',
+concat(e.code,'_',ea.code, '_', e2.code, '_fk'),' FOREIGN KEY (', ea.code,') REFERENCES ',e2.code,' (id) ',coalesce((select ruletext from entity_attr_update_rules ur where  ur.id=ea.rule_id),'') )
+res from entity_attrs ea,data_types dt, entities e,entities e2
+where e.id=ea.entity_id
+and ea.data_type_id=dt.id and dt.code='Reference'
+and ea.entity_link_id = e2.id
+and e.code=?
+and not exists(
+SELECT *
+FROM information_schema.TABLE_CONSTRAINTS
+WHERE constraint_type = 'FOREIGN KEY' and table_schema=?
+and constraint_name=concat(e.code,'_',ea.code,'_', e2.code, '_fk') COLLATE utf8_unicode_ci
+)`
+
+	o := orm.NewOrm()
+	o.Using("default")
+	log.Println(sql)
+	type addFieldsRows struct {
+		Res string `json:"res"`
+	}
+	var ws = [] addFieldsRows{}
+	//log.Println(sql)
+	_,err:= o.Raw(sql, entityCode,db).QueryRows(&ws)
+
+	if err != nil {
+		log.Println("vata")
+		return err
+	}
+	for _,element := range ws {
+		if element.Res==""{
+			log.Println("CONTINUE")
+			continue
+		}
+		sql := element.Res
+		log.Println("#################"+sql)
+		_,err := o.Raw(sql).Exec();
+		if err!=nil{
+			return err
+		}
+	}
+	return err
+
+}
+
 func doCreateUQIndexes(entityCode string)(error){
 
 	sql :=
@@ -223,6 +278,11 @@ func GenerateDDL(entityCode string) error{
 	}
 
 	err :=  doCreateUQIndexes(entityCode)
+	if err!=nil{
+		return err
+	}
+
+	err =  doCreateFKIndexes(entityCode)
 	if err!=nil{
 		return err
 	}
