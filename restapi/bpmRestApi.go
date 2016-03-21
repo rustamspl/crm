@@ -83,6 +83,50 @@ func BPMCreateInstance(res http.ResponseWriter, req *http.Request, _ httprouter.
 			response.Ok = false
 			response.ErrorText = err.Error()
 			//return
+		}else{
+			response.Ok = true
+		}
+	}
+	resP,_ := json.Marshal(response)
+	fmt.Fprint(res,string(resP))
+
+
+}
+
+func BPMManualExecInstance(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
+
+	type execInstanceRequest struct {
+		InstanceId int64 `json:"instanceId"`
+	}
+
+	type execInstanceResponse struct {
+		Ok bool `json:"ok"`
+		ErrorText string `json:"errorText"`
+	}
+	var request execInstanceRequest
+	var response execInstanceResponse
+
+	////Warning need uncomment///
+	//if RestCheckAuth(res, req) {
+	//	return
+	//}
+	////Warning need uncomment///
+
+
+	decoder := json.NewDecoder(req.Body)
+	err := decoder.Decode(&request)
+	if err!=nil {
+		response.Ok = false
+		response.ErrorText = err.Error()
+		//return
+	}else {
+		err = bpms.ManualExecInstance(request.InstanceId)
+		if err!=nil {
+			response.Ok = false
+			response.ErrorText = err.Error()
+			//return
+		}else{
+			response.Ok = true
 		}
 	}
 	resP,_ := json.Marshal(response)

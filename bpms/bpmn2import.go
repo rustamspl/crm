@@ -71,7 +71,7 @@ type TypeProcess struct {
 	Id   string `xml:"id,attr"`
 	UserTask []TypeUserTask `xml:"userTask"`
 	ScriptTask []TypeScriptTask `xml:"scriptTask"`
-	ManualTask []TypeScriptTask `xml:"manualTask"`
+	ManualTask []TypeManualTask `xml:"manualTask"`
 	ServiceTask []TypeServiceTask `xml:"serviceTask"`
 	StartEvent []TypeStartEvent `xml:"startEvent"`
 	EndEvent []TypeStopEvent `xml:"endEvent"`
@@ -104,15 +104,15 @@ func importPoint(titleText string, typeText string, elementId string, processId 
 		}
 		if cnt == 0{
 			_,err := o.Raw(
-				`insert into bp_points (is_loop,code,title,type_id,process_id)
-				values (?,?,?,(select id from bp_point_types where code=?),?)`,
+				`insert into bp_points (is_active,is_loop,code,title,type_id,process_id)
+				values (1,?,?,?,(select id from bp_point_types where code=?),?)`,
 				iLoop,elementId,titleText,typeText,processId).Exec()
 			if err!=nil{
 				panic(err)
 			}
 		}else{
 			_,err = o.Raw(
-				`update bp_points  set is_loop=?,title=?, type_id=(select id from bp_point_types where code=?),process_id=?
+				`update bp_points  set is_active=1, is_loop=?,title=?, type_id=(select id from bp_point_types where code=?),process_id=?
 				where code=?`,
 				iLoop,titleText,typeText,processId,elementId).Exec()
 		}
@@ -122,34 +122,22 @@ func importPoint(titleText string, typeText string, elementId string, processId 
 
 func ImportBPMN2(xmlStr string,processId int64 )error{
 
-
-
-
-
 	v := &TypeBPMN2{}
-
 	err := xml.Unmarshal([]byte(xmlStr), &v)
 	if err!=nil{
-		panic(err)
+		return err
 	}
-
-	//log.Println(v.Process.UserTask[0].Incoming[0])
-	//log.Println(v.Process.StartEvent[0].Id)
-	//log.Println(v.Process.SequenceFlow[0].Id)
-	//return nil
-
 
 
 	o := orm.NewOrm()
 	o.Using("default")
+
+	_,err = o.Raw("update bp_points set is_active=0 where process_id=?",processId).Exec()
+	if err!=nil{
+		return err
+	}
+
 	cnt := 0
-//	o.Raw("select count(1) cnt from bp_processes where code=?",v.Process.Id).QueryRow(&cnt)
-//	if cnt == 0{
-//		o.Raw("insert into bp_processes (code,title) values (?,?)",v.Process.Id,v.Process.Id).Exec()
-//	}
-
-
-
 	for _, element := range v.Process.StartEvent {
 		importPoint(element.Name, "startevent", element.Id ,processId,false)
 	}
@@ -172,40 +160,27 @@ func ImportBPMN2(xmlStr string,processId int64 )error{
 		importPoint(element.Name, "scripttask", element.Id ,processId,false)
 	}
 	for _, element := range v.Process.ManualTask {
-		importPoint(element.Name, "scripttask", element.Id ,processId,false)
+		importPoint(element.Name, "manualtask", element.Id ,processId,false)
 	}
 	for _, element := range v.Process.ExclusiveGateway {
 		importPoint(element.Name, "exclusivegateway", element.Id ,processId,false)
 	}
-
-
-
-
 		for _, element := range v.Process.SequenceFlow {
-
-
 			log.Println("SourceRef="+element.SourceRef)
-
-
 		o.Raw("select count(1) cnt from bp_sequence_flows where code=?",element.Id).QueryRow(&cnt)
 		if cnt==0{
 			_, err := o.Raw("insert into bp_sequence_flows (code,title,process_id) values (?,?,?)",element.Id,element.Name,processId).Exec()
 			if err!=nil{
 				panic(err)
 			}
-
-
 		}else{
 			_,err = o.Raw("update bp_sequence_flows set title=?,process_id=? where code=?",element.Name,processId,element.Id).Exec()
 			if err!=nil{
 				panic(err)
 			}
 		}
-
 		cnt  = 0
-
 		if element.SourceRef!="" {
-
 			log.Println("element.SourceRef="+element.SourceRef)
 			o.Raw("select count(1) cnt from bp_point_sfs where is_incoming=0 and sf_id=(select id from bp_sequence_flows where code=?) ", element.Id).QueryRow(&cnt)
 			if cnt == 0 {
@@ -221,9 +196,7 @@ func ImportBPMN2(xmlStr string,processId int64 )error{
 					element.SourceRef,element.Id).Exec()
 			}
 		}
-
 		if element.TargetRef!="" {
-
 			log.Println("element.TargetRef="+element.TargetRef)
 			o.Raw("select count(1) cnt from bp_point_sfs where is_incoming=1 and sf_id=(select id from bp_sequence_flows where code=?) ", element.Id).QueryRow(&cnt)
 			if cnt == 0 {
@@ -239,18 +212,7 @@ func ImportBPMN2(xmlStr string,processId int64 )error{
 					element.TargetRef,element.Id).Exec()
 			}
 		}
-
-
 	}
-
-
-
-
-
-
-
-
-
 	return nil
 
 

@@ -8,6 +8,21 @@ MetronicApp.controller('SimpleTableController', function($rootScope, $scope, $ht
 
 
 
+    $scope.simpleRestPost=function (url,data){
+        Metronic.startPageLoading();
+        RestApiService.post(url,data).
+        success(function(data) {
+            Metronic.stopPageLoading();
+            if (data.errorText) {
+                alert(data.errorText);
+            }else{
+                alert("OK");
+                $scope.bind();
+            }
+            console.log(data);
+        });
+    }
+
     $scope.getQueryParams = function (qs) {
         qs = qs.split('+').join(' ');
 
