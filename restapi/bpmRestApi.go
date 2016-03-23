@@ -93,7 +93,7 @@ func BPMCreateInstance(res http.ResponseWriter, req *http.Request, _ httprouter.
 
 }
 
-func BPMManualExecInstance(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
+func BPMManualExecByInstance(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 
 	type execInstanceRequest struct {
 		InstanceId int64 `json:"instanceId"`

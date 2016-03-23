@@ -137,6 +137,11 @@ func ImportBPMN2(xmlStr string,processId int64 )error{
 		return err
 	}
 
+	_,err = o.Raw("update bp_sequence_flows set is_active=0 where process_id=?",processId).Exec()
+	if err!=nil{
+		return err
+	}
+
 	cnt := 0
 	for _, element := range v.Process.StartEvent {
 		importPoint(element.Name, "startevent", element.Id ,processId,false)
@@ -169,12 +174,12 @@ func ImportBPMN2(xmlStr string,processId int64 )error{
 			log.Println("SourceRef="+element.SourceRef)
 		o.Raw("select count(1) cnt from bp_sequence_flows where code=?",element.Id).QueryRow(&cnt)
 		if cnt==0{
-			_, err := o.Raw("insert into bp_sequence_flows (code,title,process_id) values (?,?,?)",element.Id,element.Name,processId).Exec()
+			_, err := o.Raw("insert into bp_sequence_flows (is_active,code,title,process_id) values (1,?,?,?)",element.Id,element.Name,processId).Exec()
 			if err!=nil{
 				panic(err)
 			}
 		}else{
-			_,err = o.Raw("update bp_sequence_flows set title=?,process_id=? where code=?",element.Name,processId,element.Id).Exec()
+			_,err = o.Raw("update bp_sequence_flows set is_active=1, title=?,process_id=? where code=?",element.Name,processId,element.Id).Exec()
 			if err!=nil{
 				panic(err)
 			}

@@ -83,9 +83,10 @@ func HandleInit(){
 	router.POST("/restapi/importStandartReference/",restapi.ImportStandartReferenceRestApi)
 	router.POST("/restapi/importAdvancedReference/",restapi.ImportAdvancedReferenceRestApi)
 	router.POST("/restapi/doEntityAction/",restapi.DoEntityAction)
+	router.POST("/restapi/custom/beton/1c/NewClaim",restapi.Beton1CNewClaimRestApi)
 
 	router.POST("/restapi/BPMCreateInstance/",restapi.BPMCreateInstance)
-	router.POST("/restapi/BPMManualExecInstance/",restapi.BPMManualExecInstance)
+	router.POST("/restapi/bpms/manualExecByInstance/",restapi.BPMManualExecByInstance)
 
 	router.POST("/restapi/bpms/publish/",restapi.BPMPublish)
 

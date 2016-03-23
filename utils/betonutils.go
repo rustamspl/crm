@@ -140,3 +140,119 @@ func BetonReqSendTo1C(reqId string) error {
 
 
 
+func BetonInvoiceSendClaimTo1C(invoiceId,text string) (string,error) {
+
+	type CreateBRequest struct {
+		XMLName               xml.Name `xml:"crm:newclaim"`
+		Ttnguid               string   `xml:"crm:ttnguid"`
+		Text           time.Time `xml:"crm:text"`
+		Claimid               string `xml:"crm:claimid"`
+
+	}
+	v := &CreateBRequest{}
+	o := orm.NewOrm()
+	o.Using("default")
+	err := o.Raw(`
+	select  r.code as ttnguid,? as text,'' as claimid
+	from bi_beton_invoices r where r.id=?`, text,invoiceId).QueryRow(&v);
+	if err != nil {
+		return "",err
+	}
+
+	output, err := xml.MarshalIndent(v, "", "\t")
+	if err != nil {
+		return "",err
+	}
+	log.Println(string(output))
+
+
+	buf := bytes.NewBufferString(
+		`<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:crm="crmnewrequest">
+   <soap:Header/>
+   <soap:Body>
+   ` + string(output) +
+		`   </soap:Body>
+</soap:Envelope>`)
+	resp, err := http.Post("http://ws_user:123@185.46.152.129:8080/test_keb_1c/ws/ws2.1cws", "application/soap+xml;charset=UTF-8;action=\"crmnewrequest#crmnewrequest:newclaim\"", buf)
+	if err != nil {
+		return "",err
+	}
+	response, _ := ioutil.ReadAll(resp.Body)
+	log.Println(string(response))
+	respTxt := string(response)
+	respTxt = strings.Replace(respTxt, "m:", "", -1)
+	respTxt = strings.Replace(respTxt, "soap:", "", -1)
+	log.Println(respTxt)
+
+	type Result struct {
+		XMLName xml.Name `xml:"Envelope"`
+		Return  string `xml:"Body>newclaimResponse>return"`
+	}
+
+	var respStr Result
+
+	err = xml.Unmarshal([]byte(respTxt), &respStr)
+	log.Println(respStr)
+	log.Println(respStr.Return)
+
+	return respStr.Return,err
+
+}
+
+
+func BetonInvoicesSendCloseTo1C(invoiceId string) (bool,error) {
+
+	type CreateBRequest struct {
+		XMLName               xml.Name `xml:"crm:newclaim"`
+		Ttnguid               string   `xml:"crm:ttnguid"`
+		Answer           time.Time `xml:"crm:answer"`
+	}
+	v := &CreateBRequest{}
+	o := orm.NewOrm()
+	o.Using("default")
+	err := o.Raw(`
+	select  r.code as ttnguid,'' as answer
+	from bi_beton_invoices r where r.id=?`, invoiceId).QueryRow(&v);
+	if err != nil {
+		return false,err
+	}
+
+	output, err := xml.MarshalIndent(v, "", "\t")
+	if err != nil {
+		return false,err
+	}
+	log.Println(string(output))
+
+
+	buf := bytes.NewBufferString(
+		`<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:crm="crmnewrequest">
+   <soap:Header/>
+   <soap:Body>
+   ` + string(output) +
+		`   </soap:Body>
+</soap:Envelope>`)
+	resp, err := http.Post("http://ws_user:123@185.46.152.129:8080/test_keb_1c/ws/ws2.1cws", "application/soap+xml;charset=UTF-8;action=\"crmnewrequest#crmnewrequest:ttnclosed\"", buf)
+	if err != nil {
+		return false,err
+	}
+	response, _ := ioutil.ReadAll(resp.Body)
+	log.Println(string(response))
+	respTxt := string(response)
+	respTxt = strings.Replace(respTxt, "m:", "", -1)
+	respTxt = strings.Replace(respTxt, "soap:", "", -1)
+	log.Println(respTxt)
+
+	type Result struct {
+		XMLName xml.Name `xml:"Envelope"`
+		Return  string `xml:"Body>ttnclosedResponse>return"`
+	}
+
+	var respStr Result
+
+	err = xml.Unmarshal([]byte(respTxt), &respStr)
+	log.Println(respStr)
+	log.Println(respStr.Return)
+
+	return respStr.Return=="Ok",err
+
+}
